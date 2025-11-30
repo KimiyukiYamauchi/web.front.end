@@ -47,9 +47,12 @@ https://ja.javascript.info/
 
 ### DOM アクセス
 
+- [ドキュメント](https://ja.javascript.info/document)
+
 #### DOM の作成、追加、削除
+
+- [ドキュメントの変更](https://ja.javascript.info/modifying-document)
 
 #### イベント処理
 
-- [ドキュメントの変更](https://ja.javascript.info/modifying-document)
 - [イベント概論](https://ja.javascript.info/events)
