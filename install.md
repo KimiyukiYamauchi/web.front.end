@@ -23,8 +23,6 @@ npm -v
 
 ### 1. Microsoft の GPG キーを取得
 
-### 1. Microsoft の GPG キーを取得
-
 ```
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
 ```
