@@ -77,7 +77,3 @@ Slack に以下の情報を投稿してください。
 #### Vercel
 
 - [サイト](https://quizsite-beta.vercel.app/)
-
-### 参考サイトのリンク
-
-- [リンク](https://docs.google.com/spreadsheets/d/1aum5Y0Kz1uEZ67iEwMaCiQ4IF8QC4LhppdTpDbVKLHs/edit?usp=sharing)
