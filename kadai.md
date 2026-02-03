@@ -76,7 +76,7 @@ Slack に以下の情報を投稿してください。
 
 #### Vercel
 
-- [サイト](https://github.com/KimiyukiYamauchi/quizsite)
+- [サイト](https://quizsite-beta.vercel.app/)
 
 ### 参考サイトのリンク
 
