@@ -10,6 +10,14 @@
   - [1.5 制御構文(if、switch、for、while)](#15-制御構文ifswitchforwhile)
   - [1.6 エラーハンドリング(try...catch)](#16-エラーハンドリングtrycatch)
   - [1.7 サンプルコード：簡単な計算機アプリ](#17-サンプルコード簡単な計算機アプリ)
+- [第2章 関数とスコープ](#第2章-関数とスコープ)
+  - [2.1 関数の定義と呼び出し](#21-関数の定義と呼び出し)
+  - [2.2 引数と返り値](#22-引数と返り値)
+  - [2.3 関数の引数としてのスプレッド演算子](#23-関数の引数としてのスプレッド演算子)
+  - [2.4 スコープ](#24-スコープ)
+  - [2.5 コールバック変数](#25-コールバック変数)
+  - [2.6 アロー関数](#26-アロー関数)
+  - [2.7 サンプルコード：ToDo リストアプリ](#27-サンプルコードtodo-リストアプリ)
 
 <!-- /TOC -->
 
@@ -410,6 +418,418 @@ try {
             `エラー: ${error.message}`;
         }
       }
+    </script>
+  </body>
+</html>
+```
+
+## 第2章 関数とスコープ
+
+### 2.1 関数の定義と呼び出し
+
+#### 関数の定義
+
+```js
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+```
+
+#### 関数の呼び出し
+
+```js
+greet("Alice"); // Output: Hello, Alice!
+```
+
+#### アロー関数
+
+```js
+const multiply = function (a, b) {
+  return a * b;
+};
+console.log(multiply(2, 3)); // Output: 6
+```
+
+```js
+const multiply = (a, b) => a * b;
+console.log(multiply(2, 3)); // Output: 6
+```
+
+#### 関数の返り値
+
+```js
+function add(a, b) {
+  return a + b;
+}
+
+const result = add(2, 3);
+console.log(result); // 5と出力されます
+```
+
+#### 関数式
+
+```js
+const multiply = function (a, b) {
+  return a * b;
+};
+
+console.log(multiply(2, 3)); // 6と出力されます
+```
+
+### 2.2 引数と返り値
+
+#### 引数
+
+```js
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+console.log(greet("Alice")); // "Hello, Alice!"
+console.log(greet("Bob")); // "Hello, Bob!"
+```
+
+#### デフォルト引数
+
+```js
+function greet(name = "Guest") {
+  return `Hello, ${name}!`;
+}
+
+console.log(greet()); // "Hello, Guest!"
+console.log(greet("Bob")); // "Hello, Bob!"
+```
+
+#### レストパラメータ
+
+```js
+function sum(...numbers) {
+  return numbers.reduce((acc, curr) => acc + curr, 0);
+}
+
+console.log(sum(1, 2, 3)); // Output: 6
+console.log(sum(4, 5, 6, 7)); // Output: 22
+```
+
+#### 返り値
+
+```js
+function multiply(a, b) {
+  return a * b;
+}
+
+const result = multiply(5, 3);
+console.log(result); // Output: 15
+```
+
+### 2.3 関数の引数としてのスプレッド演算子
+
+#### スプレッド演算子を使った配列の展開
+
+```js
+function sum(a, b, c) {
+  return a + b + c;
+}
+
+const numbers = [1, 2, 3];
+console.log(sum(...numbers)); // Output: 6
+// console.log(sum(numbers[0], numbers[1], numbers[2])); と同様
+```
+
+#### レストパラメータとの違い
+
+- スプレッド演算子は、関数の実行時や配列・オブジェクトの展開時に使用
+- レストパラメータは、関数の宣言時に使用
+
+```js
+function myFunction(...args) {
+  console.log(args);
+}
+
+myFunction(1, 2, 3); // Output: [1, 2, 3]
+```
+
+#### スプレッド演算子による可読性の向上
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+console.log(Math.max(...numbers)); // Output: 5
+```
+
+### 2.4 スコープ
+
+#### グローバルスコープ
+
+```js
+const globalVal = "グローバル変数";
+function printGlobal() {
+  console.log(globalVal);
+}
+
+printGlobal(); // "グローバル変数"
+console.log(globalVal); // "グローバル変数"
+```
+
+#### ローカルスコープ(関数スコープ)
+
+```js
+function printLocal() {
+  const localVar = "ローカル変数";
+  console.log(localVar);
+}
+printLocal(); // "ローカル変数"
+console.log(localVar); // ReferenceError: localVar is not defined
+```
+
+#### ローカルスコープ(関数スコープ)
+
+```js
+function printLocal() {
+  const localVar = "ローカル変数";
+  console.log(localVar);
+}
+printLocal(); // "ローカル変数"
+console.log(localVar); // ReferenceError: localVar is not defined
+```
+
+#### ブロックスコープ
+
+```js
+if (true) {
+  let blockVar = "ブロック変数";
+  console.log(blockVar); // "ブロック変数"
+}
+console.log(blockVar); // ReferenceError: blockVar is not defined
+```
+
+### 2.5 コールバック変数
+
+#### コールバック関数の例
+
+```js
+function fetchData(callback) {
+  // データの取得処理(ここでは簡単のため、疑似的な処理を行っています)
+  const data = "取得したデータ";
+  callback(data);
+}
+
+function processData(data) {
+  console.log("取得したデータ: " + data);
+}
+
+// データを取得して処理する
+fetchData(processData); // "取得したデータ: 取得したデータ"
+```
+
+#### コールバック関数を使った非同期処理の例
+
+```js
+function fetchData(callback) {
+  setTimeout(() => {
+    const data = "取得したデータ";
+    callback(data);
+  }, 1000); // 1秒後にデータを取得してコールバック関数を呼び出す
+}
+
+function processData(data) {
+  console.log("取得したデータ: " + data);
+}
+
+console.log("データの取得を開始...");
+fetchData(processData); // "取得したデータ: 取得したデータ"
+console.log("データの取得を待っています...");
+```
+
+#### コールバック関数のエラーハンドリング
+
+```js
+function fetchData(callback) {
+  setTimeout(() => {
+    const data = "取得したデータ";
+    const error = null; // エラーが発生した場合はここにエラーオブジェクトを設定する
+    callback(error, data);
+  }, 1000); // 1秒後にデータを取得してコールバック関数を呼び出す
+}
+
+function processData(error, data) {
+  if (error) {
+    console.log("エラーが発生しました: " + error);
+    return;
+  }
+  console.log("取得したデータ: " + data);
+}
+
+console.log("データの取得を開始...");
+fetchData(processData); // "取得したデータ: 取得したデータ"
+console.log("データの取得を待っています...");
+```
+
+#### コールバック関数の代替手法
+
+- Promise: 非同期処理の状態(成功または失敗)を表すオブジェクトで、コールバック関数の代替として使用される
+
+```js
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const data = "取得したデータ";
+      const error = null; // エラーがある場合は値を入れる
+
+      if (error) {
+        reject(error); // 失敗
+      } else {
+        resolve(data); // 成功
+      }
+    }, 1000);
+  });
+}
+
+console.log("データの取得を開始...");
+
+fetchData()
+  .then((data) => {
+    console.log("取得したデータ: " + data);
+  })
+  .catch((error) => {
+    console.log("エラーが発生しました: " + error);
+  });
+
+console.log("データの取得を待っています...");
+```
+
+- Async/Await: Promiseをさらに簡潔に書くための構文で、非同期処理を同期処理のように書くことができる
+
+```js
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const data = "取得したデータ";
+      const error = null; // エラーにしたい場合は文字を入れる
+
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
+      }
+    }, 1000);
+  });
+}
+
+// asyncをつける
+async function main() {
+  try {
+    console.log("データの取得を開始...");
+
+    // awaitでPromiseの完了を待つ
+    const data = await fetchData();
+
+    console.log("取得したデータ: " + data);
+  } catch (error) {
+    console.log("エラーが発生しました: " + error);
+  }
+
+  console.log("データの取得が終了しました");
+}
+
+main();
+```
+
+### 2.6 アロー関数
+
+```js
+const 関数名 = (引数1, 引数2,...) => 式;
+```
+
+#### アロー関数の基本構文
+
+```js
+const 関数名 = (引数1, 引数2,...) => {
+  // 関数の本体
+}
+```
+
+```js
+const add = (a, b) => {
+  return a + b;
+};
+
+console.log(add(2, 3)); // Output: 5
+```
+
+#### 簡略化されたアロー関数
+
+```js
+const 関数名 = (引数1, 引数2,...) => 式;
+```
+
+```js
+const add = (a, b) => a + b;
+
+console.log(add(2, 3)); // Output: 5
+```
+
+#### アロー関数の注意点
+
+- 従来の関数式と同様に引数を使用できるが、argumentsオブジェクトは使用できない。代わりにレストパラメータ(...args)を使用して可変長引数を扱う
+- newキーワードを呼び出すことができないため、コンストラクタ関数として使用できない
+- prototypeプロパティを持たない
+
+### 2.7 サンプルコード：ToDo リストアプリ
+
+```html
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ToDo リスト</title>
+  </head>
+  <body>
+    <h1>ToDo リスト</h1>
+    <input type="text" id="new-task" placeholder="新しいタスクを入力" />
+    <button onclick="addTodo()">タスクを追加</button>
+    <ul id="task-list"></ul>
+    <script>
+      let todoList = [];
+
+      // タスクを追加する関数
+      function addTodo() {
+        const input = document.getElementById("new-task");
+        const taskList = document.getElementById("task-list");
+
+        if (input.value.trim() === "") {
+          alert("タスクを入力してください");
+          return;
+        }
+
+        todoList.push({ text: input.value, completed: false });
+        input.value = "";
+
+        renderTodoList();
+      }
+
+      // タスクを表示する関数
+      function renderTodoList() {
+        const taskList = document.getElementById("task-list");
+        taskList.innerHTML = "";
+
+        todoList.forEach((todo, index) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<input type="checkbox" ${todo.completed ? "checked" : ""} onclick="toggleComplete(${index})"> ${todo.text} <button onclick="deleteTodo(${index})">削除</button>`;
+          taskList.appendChild(li);
+        });
+      }
+
+      // タスクの完了状態を切り替える関数
+      const toggleComplete = (index) => {
+        todoList[index].completed = !todoList[index].completed;
+        renderTodoList();
+      };
+
+      // タスクを削除する関数
+      const deleteTodo = (index) => {
+        todoList.splice(index, 1);
+        renderTodoList();
+      };
     </script>
   </body>
 </html>
