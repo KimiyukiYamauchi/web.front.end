@@ -834,3 +834,120 @@ console.log(add(2, 3)); // Output: 5
   </body>
 </html>
 ```
+
+## 第3章 オブジェクト指向とクラス
+
+### 3.1 クラス構文
+
+#### クラスの定義
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log(`Hello, my name is ${this.name}`);
+  }
+
+  sayAge() {
+    console.log(`I am ${this.age} years old`);
+  }
+}
+```
+
+#### クラスからのインスタンスの生成
+
+```js
+const person1 = new Person("Alice", 30);
+const person2 = new Person("Bob", 25);
+```
+
+#### メソッドの呼び出し
+
+```js
+person1.greet(); // Output: Hello, my name is Alice
+person1.sayAge(); // Output: I am 30 years old
+
+person2.greet(); // Output: Hello, my name is Bob
+person2.sayAge(); // Output: I am 25 years old
+```
+
+#### 静的メソッド
+
+```js
+class MathUtils {
+  static square(x) {
+    return x * x;
+  }
+}
+
+console.log(MathUtils.square(5)); // 25と出力されます
+```
+
+### 3.2 クラスからのインスタンス(オブジェクト)の生成
+
+#### コンストラクタメソッド
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+}
+```
+
+#### インスタンスの生成
+
+```js
+const person1 = new Person("Alice", 30);
+const person2 = new Person("Bob", 25);
+```
+
+#### インスタンスメソッドの呼び出し
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log(`Hello, my name is ${this.name}`);
+  }
+}
+const person1 = new Person("Alice", 30);
+person1.greet(); // Output: Hello, my name is Alice
+```
+
+### 3.3 オブジェクト指向プログラミングの原則
+
+#### カプセル化
+
+カプセル化は、オブジェクトの内部状態を隠蔽し、外部からのアクセスを制限する原則
+
+```js
+class BankAccount {
+  #balance = 0; // Private field to store the balance
+
+  deposit(amount) {
+    if (amount > 0) {
+      this.#balance += amount;
+    }
+  }
+
+  withdraw(amount) {
+    if (amount > 0 && amount <= this.#balance) {
+      this.#balance -= amount;
+    }
+  }
+
+  getBalance() {
+    return this.#balance;
+  }
+}
+```
