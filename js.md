@@ -18,6 +18,13 @@
   - [2.5 コールバック変数](#25-コールバック変数)
   - [2.6 アロー関数](#26-アロー関数)
   - [2.7 サンプルコード：ToDo リストアプリ](#27-サンプルコードtodo-リストアプリ)
+- [第3章 オブジェクト指向とクラス](#第3章-オブジェクト指向とクラス)
+  - [3.1 クラス構文](#31-クラス構文)
+  - [3.2 クラスからのインスタンス(オブジェクト)の生成](#32-クラスからのインスタンスオブジェクトの生成)
+  - [3.3 オブジェクト指向プログラミングの原則](#33-オブジェクト指向プログラミングの原則)
+  - [3.4 プロトタイプとインスタンス](#34-プロトタイプとインスタンス)
+  - [3.5 クラス構文以前のオブジェクト作成方法](#35-クラス構文以前のオブジェクト作成方法)
+  - [3.6 サンプルコード：図形病がアプリケーション](#36-サンプルコード図形病がアプリケーション)
 
 <!-- /TOC -->
 
@@ -931,18 +938,30 @@ person1.greet(); // Output: Hello, my name is Alice
 カプセル化は、オブジェクトの内部状態を隠蔽し、外部からのアクセスを制限する原則
 
 ```js
-class BankAccount {
-  #balance = 0; // Private field to store the balance
+class BankAccounrt {
+  #balance = 0; // プライベートフィールド
+
+  constructor(initialBalance) {
+    this.#balance = initialBalance;
+  }
 
   deposit(amount) {
     if (amount > 0) {
       this.#balance += amount;
+      console.log(`Deposited: ${amount}. New balance: ${this.#balance}`);
+    } else {
+      console.log("Deposit amount must be positive.");
     }
   }
 
   withdraw(amount) {
     if (amount > 0 && amount <= this.#balance) {
       this.#balance -= amount;
+      console.log(`Withdrew: ${amount}. New balance: ${this.#balance}`);
+    } else {
+      console.log(
+        "Withdrawal amount must be positive and less than or equal to the current balance.",
+      );
     }
   }
 
@@ -950,4 +969,309 @@ class BankAccount {
     return this.#balance;
   }
 }
+```
+
+#### 継承
+
+継承は、既存のクラスを拡張して新しいクラスを作成する原則。継承を使うことで、コードの再利用性が向上し、階層構造を作ることができる。
+
+```js
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
+
+class Dog extends Animal {
+  bark() {
+    console.log("わんわん");
+  }
+}
+
+const dog = new Dog("ぽち");
+dog.speak(); // ぽち makes a noise.(継承したメソッド)
+dog.bark(); // わんわん (独自のメソッド)
+```
+
+#### ポリモーフィズム
+
+ポリモーフィズム(多態性)は、同じインタフェースを持つオブジェクトが、それぞれ異なる動作を行うことができる原則
+
+```js
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+
+  bark() {
+    console.log("Animal can't bark.");
+  }
+}
+
+class Dog extends Animal {
+  bark() {
+    // オーバーライド
+    console.log("わんわん");
+  }
+}
+
+class Cat extends Animal {
+  bark() {
+    // オーバーライド
+    console.log("にゃー");
+  }
+}
+
+const dog = new Dog("ぽち");
+dog.speak(); // ぽち makes a noise.(継承したメソッド)
+dog.bark(); // わんわん (オーバライドしたメソッド)
+
+const cat = new Cat("たま");
+cat.speak(); // たま makes a noise.(継承したメソッド)
+cat.bark(); // にゃー (オーバライドしたメソッド)
+```
+
+### 3.4 プロトタイプとインスタンス
+
+#### プロトタイプオブジェクト
+
+```js
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+// Personのプロトタイプオブジェクトにgreetメソッドを追加
+Person.prototype.greet = function () {
+  console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+};
+```
+
+#### インスタンスの作成とプロトタイプチェーン
+
+```js
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+// Personのプロトタイプオブジェクトにgreetメソッドを追加
+Person.prototype.greet = function () {
+  console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+};
+
+const alice = new Person("Alice", 30);
+alice.greet(); // Hello, my name is Alice and I am 30 years old.(プロトタイプチェーン経由で実行)
+
+console.log(alice instanceof Person); // true
+console.log(alice instanceof Object); // true(すべてのオブジェクトはObjectのインスタンスであるため)
+```
+
+#### プロトタイプを使った継承
+
+```js
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+// Personのプロトタイプオブジェクトにgreetメソッドを追加
+Person.prototype.greet = function () {
+  console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+};
+
+function Student(name, age, grade) {
+  Person.call(this, name, age); // Personコンストラクタを呼び出して、nameとageを初期化
+  this.grade = grade;
+}
+
+// StudentのプロトタイプオブジェクトをPersonのプロトタイプオブジェクトに設定
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.constructor = Student; // constructorプロパティを修正
+
+// Studentのプロトタイプに独自のメソッドを追加
+Student.prototype.study = function () {
+  console.log(`${this.name} is studying in grade ${this.grade}.`);
+};
+
+const bob = new Student("Bob", 20, "A");
+bob.greet(); // Hello, my name is Bob and I am 20 years old.(Personのgreetメソッドが呼び出される)
+bob.study(); // Bob is studying in grade A.  (Studentのstudyメソッドが呼び出される)
+```
+
+### 3.5 クラス構文以前のオブジェクト作成方法
+
+#### オブジェクトリテラルを使ったオブジェクトの作成
+
+```js
+const person = {
+  name: "John",
+  age: 30,
+  sayHello: function () {
+    console.log(
+      `Hello, my name is ${this.name} and I am ${this.age} years old.`,
+    );
+  },
+};
+
+person.sayHello(); // Output: Hello, my name is John and I am 30 years old.
+```
+
+#### コンストラクタ関数を使ったオブジェクトの作成
+
+```js
+function Person(name, age) {
+  // コンストラクタ関数(慣習的に関数名は大文字で始める)
+  this.name = name; // インスタンスのプロパティ
+  this.age = age;
+  this.greet = function () {
+    // インスタンスのメソッド
+    console.log(
+      `Hello, my name is ${this.name} and I am ${this.age} years old.`,
+    );
+  };
+}
+
+// インスタンスの作成
+const person1 = new Person("Alice", 30);
+const person2 = new Person("Bob", 25);
+
+// メソッドの呼び出し
+person1.greet(); // Hello, my name is Alice and I am 30 years old.
+person2.greet(); // Hello, my name is Bob and I am 25 years old.
+```
+
+```js
+function Person(name, age) {
+  // コンストラクタ関数(慣習的に関数名は大文字で始める)
+  this.name = name; // インスタンスのプロパティ
+  this.age = age;
+}
+
+// メソッドをプロトタイプに追加
+Person.prototype.greet = function () {
+  console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+};
+
+// インスタンスの作成
+const person1 = new Person("Alice", 30);
+const person2 = new Person("Bob", 25);
+
+// メソッドの呼び出し
+person1.greet(); // Hello, my name is Alice and I am 30 years old.
+person2.greet(); // Hello, my name is Bob and I am 25 years old.
+
+// greetメソッドはプロトタイプに定義されているため、
+// person1とperson2は同じgreetメソッドを共有しています。
+console.log(person1.greet === person2.greet); // true
+```
+
+### 3.6 サンプルコード：図形病がアプリケーション
+
+```js
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>図形描画アプリケーション</title>
+  </head>
+  <body>
+    <h1>図形描画アプリケーション</h1>
+    <p>
+      このアプリケーションは、ユーザーが図形を描画できるようにするものです。
+    </p>
+    <canvas
+      id="canvas"
+      width="500"
+      height="500"
+      style="border: 1px solid #000000"
+    ></canvas>
+    <script>
+      // 図形の基本クラス
+      class Shape {
+        constructor(x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.color = color;
+        }
+
+        // 図形を描画するためのメソッド(サブクラスでオーバーライドされる)
+        draw(ctx) {
+          // サブクラスで実装される
+        }
+      }
+
+      // 円のクラス
+      class Circle extends Shape {
+        constructor(x, y, radius, color) {
+          super(x, y, color); // 親クラスのコンストラクタを呼び出す
+          this.radius = radius;
+        }
+        // 円を描画するためのメソッド
+        draw(ctx) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+      }
+
+      // 四角形のクラス
+      class Rectangle extends Shape {
+        constructor(x, y, width, height, color) {
+          super(x, y, color); // 親クラスのコンストラクタを呼び出す
+          this.width = width;
+          this.height = height;
+        }
+        // 四角形を描画するためのメソッド
+        draw(ctx) {
+          ctx.fillStyle = this.color;
+          ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+      }
+
+      // 三角形のクラス
+      class Triangle extends Shape {
+        constructor(x, y, base, height, color) {
+          super(x, y, color); // 親クラスのコンストラクタを呼び出す
+          this.base = base;
+          this.height = height;
+        }
+        // 三角形を描画するためのメソッド
+        draw(ctx) {
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x + this.base / 2, this.y + this.height);
+          ctx.lineTo(this.x - this.base / 2, this.y + this.height);
+          ctx.closePath();
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+      }
+
+      // キャンバスのコンテキストを取得
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // 図形のインスタンスを作成
+      const shapes = [
+        new Circle(100, 100, 50, "red"),
+        new Rectangle(200, 200, 100, 50, "blue"),
+        new Triangle(300, 300, 80, 60, "green"),
+      ];
+
+      // 図形を描画
+      shapes.forEach((shape) => shape.draw(ctx));
+    </script>
+  </body>
+</html>
+
 ```
