@@ -1174,7 +1174,7 @@ person2.greet(); // Hello, my name is Bob and I am 25 years old.
 console.log(person1.greet === person2.greet); // true
 ```
 
-### 3.6 サンプルコード：図形病がアプリケーション
+### 3.6 サンプルコード：図形描画アプリケーション
 
 ```js
 <!doctype html>
