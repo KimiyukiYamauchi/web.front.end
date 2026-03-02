@@ -1275,3 +1275,117 @@ console.log(person1.greet === person2.greet); // true
 </html>
 
 ```
+
+## 第4章 配列と文字列操作
+
+### 4.1 配列の基本操作(生成、アクセス、変更)
+
+#### 配列の生成
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+const numbers = [1, 2, 3, 4, 5];
+const mixed = ["hello", 42, true, null]; // 異なるデータ型を含む配列
+
+console.log("Fruits:", fruits);
+console.log("Numbers:", numbers);
+console.log("Mixed:", mixed);
+```
+
+#### 配列の要素にアクセスする
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+const numbers = [1, 2, 3, 4, 5];
+
+console.log(fruits[0]); // Output: apple
+console.log(numbers[2]); // Output: 3
+```
+
+#### 配列の要素を変更する
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+
+fruits[1] = "blueberry";
+console.log(fruits); // Output: ["apple", "blueberry", "cherry"]
+```
+
+#### 配列の長さを取得する
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+
+console.log(fruits.length); // Output: 3と出力されます
+```
+
+#### 配列の末尾に要素を追加(push)
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+fruits.push("orange"); // 配列に新しい要素を追加します
+
+console.log(fruits); // Output: ["apple", "banana", "cherry", "orange"]
+```
+
+#### 配列の末尾から要素を削除する(pop)
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+
+let removedFruit = fruits.pop(); // Removes "cherry"
+console.log(removedFruit); // Output: "cherry"
+
+console.log(fruits); // Output: ["apple", "banana"]
+```
+
+#### 配列の先頭に要素を追加する(unshift)
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+
+fruits.unshift("orange"); // Adds "orange" to the beginning of the array
+console.log(fruits); // Output: ["orange", "apple", "banana", "cherry"]
+```
+
+#### 配列の先頭から要素を削除する(shift)
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+
+let firstFruit = fruits.shift(); // Removes "apple" from the beginning of the array
+console.log(firstFruit); // Output: "apple"
+console.log(fruits); // Output: ["banana", "cherry"]
+```
+
+### 4.2 配列の追加操作とES6の新機能
+
+#### スプレッド演算子(...)を使った配列の結合と複製
+
+```js
+const fruits1 = ["apple", "banana"];
+const fruits2 = ["date", "elderberry"];
+
+// 配列の結合
+const combinedFruits = [...fruits1, ...fruits2];
+console.log(combinedFruits); // ['apple', 'banana', 'date', 'elderberry']
+
+// 配列のコピー
+const copiedFruits = [...fruits1];
+console.log(copiedFruits); // ['apple', 'banana']
+copiedFruits.push("cherry");
+console.log(copiedFruits); // ['apple', 'banana', 'cherry']
+console.log(fruits1); // ['apple', 'banana'] - 元の配列は変更されない
+```
+
+#### 分割代入を使った配列の要素の取り出し
+
+```js
+const fruits = ["apple", "banana", "cherry", "date", "elderberry"];
+
+// 先頭の要素を取得
+const [first, second] = fruits;
+console.log(first); // "apple"
+console.log(second); // "banana"
+```
+
