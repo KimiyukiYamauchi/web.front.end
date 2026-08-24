@@ -35,6 +35,7 @@
   - [4.7 DOM操作の基本](#47-dom操作の基本)
   - [4.8 非同期処理の基本](#48-非同期処理の基本)
   - [4.9 配列と文字列の操作を用いたタスク管理アプリケーション](#49-配列と文字列の操作を用いたタスク管理アプリケーション)
+  - [4.10 タスク管理アプリケーション(react版)](#410-タスク管理アプリケーションreact版)
 
 <!-- /TOC -->
 
@@ -1894,3 +1895,166 @@ getData();
   </script>
 </html>
 ```
+
+### 4.10 タスク管理アプリケーション(react版)
+
+React では、HTML のように `document.getElementById()` で画面を直接書き換えるのではなく、 **タスク一覧を state（状態）として管理し、state が変わると画面が自動的に再描画される** ように作るのが基本です。
+
+#### App.js
+
+```js
+import { useState } from "react";
+import "./App.css";
+
+function App() {
+  // 初期タスク
+  const [tasks, setTasks] = useState([
+    { name: "ドキュメントを読む", completed: true },
+    { name: "サンプルコードを書く", completed: true },
+  ]);
+
+  // 入力欄の内容
+  const [taskName, setTaskName] = useState("");
+
+  // 新しいタスクを追加
+  const addTask = () => {
+    const newTaskName = taskName.trim();
+
+    if (newTaskName !== "") {
+      setTasks([
+        ...tasks,
+        {
+          name: newTaskName,
+          completed: false,
+        },
+      ]);
+
+      // 入力欄をクリア
+      setTaskName("");
+    }
+  };
+
+  // タスクの完了状態を切り替える
+  const toggleTask = (index) => {
+    const newTasks = tasks.map((task, i) => {
+      if (i === index) {
+        return {
+          ...task,
+          completed: !task.completed,
+        };
+      }
+
+      return task;
+    });
+
+    setTasks(newTasks);
+  };
+
+  // タスクを削除
+  const removeTask = (index) => {
+    const newTasks = tasks.filter((task, i) => i !== index);
+    setTasks(newTasks);
+  };
+
+  return (
+    <>
+      <h1>タスク管理アプリケーション</h1>
+
+      <input
+        type="text"
+        placeholder="新しいタスクを入力"
+        value={taskName}
+        onChange={(e) => setTaskName(e.target.value)}
+      />
+
+      <button onClick={addTask}>追加</button>
+
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index} className={task.completed ? "completed" : ""}>
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => toggleTask(index)}
+            />
+
+            <span>{task.name}</span>
+
+            <button onClick={() => removeTask(index)}>削除</button>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+export default App;
+```
+
+#### App.css
+
+```css
+li {
+  margin-bottom: 5px;
+}
+
+span {
+  margin-right: 10px;
+}
+
+.completed span {
+  text-decoration: line-through;
+  color: grey;
+}
+```
+
+元の JavaScript と React を対応させると、特に重要なのは次の違いです。
+
+| 元のJavaScript              | React                                |
+| --------------------------- | ------------------------------------ |
+| `let tasks = [...]`         | `useState([...])`                    |
+| `document.getElementById()` | 基本的に使用しない                   |
+| `input.value`               | `value={taskName}`                   |
+| `onclick="addTask()"`       | `onClick={addTask}`                  |
+| `onchange="..."`            | `onChange={...}`                     |
+| `innerHTML`                 | JSXで記述                            |
+| `tasks.push()`              | `setTasks([...tasks, 新しいタスク])` |
+| `tasks.splice()`            | `filter()` + `setTasks()`            |
+| `updataTaskList()`          | 不要                                 |
+
+特に React では、元コードにある
+
+```js
+tasks.push({ name: taskName, completed: false });
+updataTaskList();
+```
+
+という考え方が、
+
+```js
+setTasks([
+  ...tasks,
+  {
+    name: newTaskName,
+    completed: false,
+  },
+]);
+```
+
+に変わります。  
+`setTasks()` で `tasks` が変更されると、React が自動的に
+
+```js
+{tasks.map((task, index) => (
+  ...
+))}
+```
+
+の部分を再描画します。そのため、元コードの `updataTaskList()` のような「HTMLを作り直す関数」は必要ありません。  
+また、入力欄も
+
+```js
+<input value={taskName} onChange={(e) => setTaskName(e.target.value)} />
+```
+
+として、入力内容を React の state で管理しています。このような入力欄を **制御コンポーネント** と呼びます。
