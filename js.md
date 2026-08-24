@@ -9,7 +9,7 @@
   - [1.4 演算子](#14-演算子)
   - [1.5 制御構文(if、switch、for、while)](#15-制御構文ifswitchforwhile)
   - [1.6 エラーハンドリング(try...catch)](#16-エラーハンドリングtrycatch)
-  - [1.7 サンプルコード：簡単な計算機アプリ](#17-サンプルコード簡単な計算機アプリ)
+  - [1.7 簡単な計算機アプリ](#17-簡単な計算機アプリ)
 - [第2章 関数とスコープ](#第2章-関数とスコープ)
   - [2.1 関数の定義と呼び出し](#21-関数の定義と呼び出し)
   - [2.2 引数と返り値](#22-引数と返り値)
@@ -17,14 +17,24 @@
   - [2.4 スコープ](#24-スコープ)
   - [2.5 コールバック変数](#25-コールバック変数)
   - [2.6 アロー関数](#26-アロー関数)
-  - [2.7 サンプルコード：ToDo リストアプリ](#27-サンプルコードtodo-リストアプリ)
+  - [2.7 ToDo リストアプリ](#27-todo-リストアプリ)
 - [第3章 オブジェクト指向とクラス](#第3章-オブジェクト指向とクラス)
   - [3.1 クラス構文](#31-クラス構文)
   - [3.2 クラスからのインスタンス(オブジェクト)の生成](#32-クラスからのインスタンスオブジェクトの生成)
   - [3.3 オブジェクト指向プログラミングの原則](#33-オブジェクト指向プログラミングの原則)
   - [3.4 プロトタイプとインスタンス](#34-プロトタイプとインスタンス)
   - [3.5 クラス構文以前のオブジェクト作成方法](#35-クラス構文以前のオブジェクト作成方法)
-  - [3.6 サンプルコード：図形描画アプリケーション](#36-サンプルコード図形描画アプリケーション)
+  - [3.6 図形描画アプリケーション](#36-図形描画アプリケーション)
+- [第4章 配列と文字列操作](#第4章-配列と文字列操作)
+  - [4.1 配列の基本操作(生成、アクセス、変更)](#41-配列の基本操作生成アクセス変更)
+  - [4.2 配列の追加操作とES6の新機能](#42-配列の追加操作とes6の新機能)
+  - [4.3 配列のメソッド(forEach、map、filter、reduce)](#43-配列のメソッドforeachmapfilterreduce)
+  - [4.4 文字列の基本操作(連結、部分文字列の取得、検索)](#44-文字列の基本操作連結部分文字列の取得検索)
+  - [4.5 文字列のメソッド(split、join、replace)とES6の新機能](#45-文字列のメソッドsplitjoinreplaceとes6の新機能)
+  - [4.6 JSONの基本(parse、stringify)](#46-jsonの基本parsestringify)
+  - [4.7 DOM操作の基本](#47-dom操作の基本)
+  - [4.8 非同期処理の基本](#48-非同期処理の基本)
+  - [4.9 配列と文字列の操作を用いたタスク管理アプリケーション](#49-配列と文字列の操作を用いたタスク管理アプリケーション)
 
 <!-- /TOC -->
 
@@ -352,7 +362,7 @@ try {
 }
 ```
 
-### 1.7 サンプルコード：簡単な計算機アプリ
+### 1.7 簡単な計算機アプリ
 
 ```html
 <!doctype html>
@@ -781,7 +791,7 @@ console.log(add(2, 3)); // Output: 5
 - newキーワードを呼び出すことができないため、コンストラクタ関数として使用できない
 - prototypeプロパティを持たない
 
-### 2.7 サンプルコード：ToDo リストアプリ
+### 2.7 ToDo リストアプリ
 
 ```html
 <!doctype html>
@@ -1174,7 +1184,7 @@ person2.greet(); // Hello, my name is Bob and I am 25 years old.
 console.log(person1.greet === person2.greet); // true
 ```
 
-### 3.6 サンプルコード：図形描画アプリケーション
+### 3.6 図形描画アプリケーション
 
 ```js
 <!doctype html>
@@ -1387,5 +1397,500 @@ const fruits = ["apple", "banana", "cherry", "date", "elderberry"];
 const [first, second] = fruits;
 console.log(first); // "apple"
 console.log(second); // "banana"
+
+// 途中の要素を無視する
+const [, , third] = fruits;
+console.log(third); // "cherry"
+
+// 配列の残りの要素を取得
+const [firstFruit, ...restFruits] = fruits;
+console.log(firstFruit); // "apple"
+console.log(restFruits); // ["banana", "cherry", "date", "elderberry"]
 ```
 
+#### ES6の新しい配列メソッド
+
+##### find
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+const foundNumber = numbers.find((num) => num > 3);
+console.log(foundNumber); // Output: 4
+
+const notFound = numbers.find((num) => num > 10);
+console.log(notFound); // Output: undefined
+```
+
+##### findIndex
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+const foundIndex = numbers.findIndex((num) => num > 3);
+console.log(foundIndex); // Output: 3
+
+const notFoundIndex = numbers.findIndex((num) => num > 10);
+console.log(notFoundIndex); // Output: -1
+```
+
+##### includes
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+console.log(fruits.includes("banana")); // true
+console.log(fruits.includes("grape")); // false
+
+// インデックス1から検索
+console.log(fruits.includes("banana", 1)); // true
+// インデックス2から検索
+console.log(fruits.includes("banana", 2)); // false
+```
+
+### 4.3 配列のメソッド(forEach、map、filter、reduce)
+
+#### forEach
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+numbers.forEach((number, index, array) => {
+  // number: 現在の要素
+  // index: 現在の要素のインデックス
+  // array: 元の配列
+  console.log(`Index: ${index}, Number: ${number}, Array: [${array}]`);
+});
+```
+
+#### map
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map((num) => num * 2);
+
+console.log(doubled); // Output: [2, 4, 6, 8, 10]
+console.log(numbers); // Output: [1, 2, 3, 4, 5]
+```
+
+#### filter
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+const evenNumbers = numbers.filter((num) => num % 2 === 0);
+
+console.log(evenNumbers); // Output: [2, 4]
+console.log(numbers); // Output: [1, 2, 3, 4, 5]
+```
+
+#### reduce
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+// 合計値を計算
+const sum = numbers.reduce((accumulator, currentValue) => {
+  console.log(`Accumulator: ${accumulator}, Current Value: ${currentValue}`);
+  return accumulator + currentValue;
+}, 0);
+
+console.log(`Sum: ${sum}`);
+```
+
+1. 初期値として`accumulator`に`0`を設定
+1. 配列の最初の要素`1`を`currentValue`として、コールバックを実行`(0+1)`。結果の`1`が次の`accumulator`になります。
+1. 次の要素`2`をcurrentValueとして、コールバックを実行`1+2`。結果の`3`が次の`accumulator`になります。
+1. 以下、同様に配列の最後の要素まで処理を続けます。
+1. 最終的にaccumulatorの値`15`が`reduce`の返り値となります。
+
+### 4.4 文字列の基本操作(連結、部分文字列の取得、検索)
+
+#### 文字列の連結
+
+```js
+const firstName = "John";
+const lastName = "Doe";
+
+// プラス演算子を使った連結
+const fullName1 = firstName + " " + lastName;
+console.log(fullName1); // "John Doe"
+
+// テンプレート文字列を使った連結(推奨)
+const fullName2 = `${firstName} ${lastName}`;
+console.log(fullName2); // "John Doe"
+```
+
+#### 部分文字列の取得(slice、substring)
+
+```js
+const str = "Hello, World!";
+
+// slice(開始インデックス[,終了インデックス])
+console.log(str.slice(0, 5)); // "Hello"(0から5の手前まで)
+console.log(str.slice(7)); // "world!"(7から最後まで)
+console.log(str.slice(-6)); // "world!"(末尾から6文字)
+
+// substring(開始インデックス[,終了インデックス])
+// sliceと似ているが、負のインデックスは0として扱われる
+// 引数の大小関係が逆でも自動で入れ替えてくれる
+console.log(str.substring(0, 5)); // "Hello"
+console.log(str.substring(7, 12)); // "world"
+console.log(str.substring(5, 0)); // "Hello"(0, 5と解釈される)
+```
+
+#### 文字列の検索(indexOf、lastIndexOf、includes)
+
+```js
+const str = "Hello, world! Hello again!";
+
+// indexOf(検索文字列[, 開始位置])
+// 最初に現れるインデックスを返す。見つからない場合は-1
+console.log(str.indexOf("o")); // 5
+console.log(str.indexOf("world")); // 7
+console.log(str.indexOf("l", 3)); // 3(インデックス3意向で最初の'l')
+console.log(str.indexOf("bye")); // -1(見つからない)
+
+// lastIndexOf(検索文字列[, 開始位置])
+// 最後に現れるインデックスを返す。見つからない場合は-1
+// 開始位置を指定した場合、そこから前に向かって検索する
+console.log(str.lastIndexOf("o")); // 18(最後の'o')
+console.log(str.lastIndexOf("Hello")); // 14(最後の'Hello')
+console.log(str.lastIndexOf("l", 10)); // 10(インデックス10以前で最後の'l')
+
+// includes(検索文字列[, 開始位置])
+// 文字列が含まれているかをbooleanで返す(ES6)
+console.log(str.includes("world")); // true
+console.log(str.includes("Hello")); // true
+console.log(str.includes("bye")); // false
+console.log(str.includes("Hello", 10)); // true(インデックス10以降に含まれるか)
+```
+
+### 4.5 文字列のメソッド(split、join、replace)とES6の新機能
+
+#### split
+
+```js
+const str = "apple,banana,orange";
+const fruitsArray = str.split(","); // カンマで分割
+console.log(fruitsArray); // [ 'apple', 'banana', 'orange' ]と出力されます
+
+const sentence = "This is a pen";
+const words = sentence.split(" "); // スペースで分割
+console.log(words); // [ 'This', 'is', 'a', 'pen' ]
+
+const chars = "abc".split(""); // 空文字で分割すると1文字ずつの配列になる
+console.log(chars); // [ 'a', 'b', 'c' ]
+```
+
+#### join
+
+```js
+const fruitsArray = ["apple", "banana", "orange"];
+const str1 = fruitsArray.join(", "); // カンマとスペースで連結
+console.log(str1); // "apple, banana, orange"と出力されます
+
+const str2 = fruitsArray.join("-"); // ハイフンで連結
+console.log(str2); // "apple-banana-orange"
+
+const str3 = fruitsArray.join(""); // 区切り文字なしで連結
+console.log(str3); // applebananaorange
+```
+
+#### replace
+
+```js
+const str = "Hello, world! world!";
+const newStr1 = str.replace("world", "JavaScript"); // 最初に一致した "world" だけ置換
+console.log(newStr1); // "Hello, JavaScript! world!"と出力されます
+console.log(str); // "Hello, world! world!"(元の文字列はそのまま)
+
+// 正規表現を使って、大文字小文字を区別せずに置換
+const newStr2 = str.replace(/hello/i, "Hi"); // iフラグ: 大文字小文字無視
+console.log(newStr2); // "Hi, world! world!"
+
+// 正規表現とgフラグを使って、一致したすべてを置換
+const newStr3 = str.replace(/world/g, "everyone"); // gフラグ: グローバル検索
+console.log(newStr3); // Hello, everyone! everyone!
+```
+
+#### テンプレート文字列を使った文字列の結合
+
+```js
+const fname = "Alice";
+const age = 25;
+// 埋め込みは ${ 式 }の形式
+const str = `My name is ${fname} and I am ${age} years old. Next year I will be ${age + 1}.`;
+console.log(str); // "My name is Alice and I am 25 years old. Next year I will be 26."と出力されます
+
+// 改行もそのまま反映される
+const multiLineStr = `This is the first line.
+This is the second line.`;
+console.log(multiLineStr);
+```
+
+#### タグ付きレンプレート文字列の紹介
+
+```js
+// タグ関数を定義
+function hightlight(strings, ...values) {
+  console.log("strings:", strings);
+  console.log("values:", values);
+  let result = "";
+  strings.forEach((str, i) => {
+    result += str;
+    if (i < values.length) {
+      // value を大文字にして<span>で囲む
+      result += `<span style="color:red; font-weight:bold;">${values[i].toString().toUpperCase()}</span>`;
+    }
+  });
+  return result;
+}
+
+const name = "alice";
+const city = "Tokyo";
+
+// タグ関数を使ってテンプレート文字列を処理
+const taggedStr = hightlight`Hello, ${name}! Welcome to ${city}.`;
+
+console.log(taggedStr);
+// 出力例: Hello, <span style="color:red; font-weight:bold;">ALICE</span>! Welcome to <span style="color:red; font-weight:bold;">TOKYO</span>.
+
+// タグ関数への引数
+// strings: [ 'Hello, ', '! Welcome to ', '.' ](テンプレートリテラル内の文字列部分)
+// values: [ 'alice', 'Tokyo' ](埋め込まれた値)
+```
+
+### 4.6 JSONの基本(parse、stringify)
+
+```js
+// オブジェクトを JSON 文字列に変換(シリアライズ)
+const person = {
+  name: "田中太郎",
+  age: 30,
+  skills: ["HTML", "CSS", "JavaScript"],
+};
+
+const jsonString = JSON.stringify(person);
+console.log(jsonString);
+// {"name":"田中太郎","age":30,"skills":["HTML","CSS","JavaScript"]}
+
+// JSON 文字列をオブジェクトに変換(デシリアライズ)
+const parsedPerson = JSON.parse(jsonString);
+console.log(parsedPerson.name); // "田中太郎"
+console.log(parsedPerson.skills[2]); // "JavaScript"
+```
+
+```js
+// LocalStrageにデータを保存する例
+function saveTask(task) {
+  const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+  tasks.push(task);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+```
+
+### 4.7 DOM操作の基本
+
+#### 要素の取得：
+
+```js
+// ID属性による要素の取得
+const element = document.getElementById("myElement");
+
+// クラス名による要素の取得(複数取得される場合あり)
+const elements = document.getElementsByClassName("myClass");
+
+// CSSセレクタによる要素の取得
+const element2 = document.querySelector(".container > div");
+const elements2 = document.querySelectorAll("ul li");
+```
+
+#### 要素の作成と追加：
+
+```js
+// 新しい要素を作成
+const newDiv = document.createElement("div");
+// テキスト内容を設定
+newDiv.textContent = "新しい要素";
+// または
+newDiv.innerHTML = "<span>HTMLを含む内容</span>";
+
+// 既存の要素に子要素として追加
+document.body.appendChild(newDiv);
+
+// 特定の要素の前に挿入
+parentElement.insertBefore(newDiv, refenceElement);
+```
+
+#### イベント処理：
+
+```js
+// イベントリスナーを追加
+Element.addEventListener("click", function (event) {
+  console.log("クリックされました！");
+  // イベントの伝播を止める
+  event.stopPropagation();
+  // デフォルトの動作を防ぐ(例: リンクのクリック)
+  event.preventDefault();
+});
+
+// フォーム要素の値を取得
+const inputValue = document.getElementById("myInput").value;
+```
+
+### 4.8 非同期処理の基本
+
+#### Promiseの基本
+
+```js
+// 非同期処理をPromiseでラップする例
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    // 非同期処理(例：APIリクエスト)を模擬
+    setTimeout(() => {
+      const success = true; // 成功したと仮定
+
+      if (success) {
+        resolve("データの取得に成功しました");
+      } else {
+        reject("エラーが発生しました");
+      }
+    }, 1000); //1秒後に結果を返す
+  });
+}
+
+// Promiseの使用
+fetchData()
+  .then((data) => {
+    console.log(data); // 成功時： 「データの取得に成功しました」
+  })
+  .catch((error) => {
+    console.error(error); // 失敗時：「エラーが発生しました」
+  })
+  .finally(() => {
+    console.log("処理が完了しました"); // 成功/失敗どちらの場合も実行
+  });
+```
+
+#### Async/Awaitの使用
+
+```js
+// 非同期処理をPromiseでラップする例
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    // 非同期処理(例：APIリクエスト)を模擬
+    setTimeout(() => {
+      const success = true; // 成功したと仮定
+
+      if (success) {
+        resolve("データの取得に成功しました");
+      } else {
+        reject("エラーが発生しました");
+      }
+    }, 1000); //1秒後に結果を返す
+  });
+}
+
+// async/awaitで書き直した例
+async function getData() {
+  try {
+    const result = await fetchData(); // Promiseが解決されるまで待機
+    console.log(result); // 成功時： 「データの取得に成功しました」
+  } catch (error) {
+    console.error(error); // 失敗時：「エラーが発生しました」
+  } finally {
+    console.log("処理が完了しました");
+  }
+}
+
+// 関数の実行
+getData();
+```
+
+### 4.9 配列と文字列の操作を用いたタスク管理アプリケーション
+
+```html
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>タスク管理アプリケーション</title>
+    <style>
+      li {
+        margin-bottom: 5px;
+      }
+      span {
+        margin-right: 10px;
+      }
+      .completed span {
+        text-decoration: line-through;
+        color: grey;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>タスク管理アプリケーション</h1>
+    <input type="text" id="taskInput" placeholder="新しいタスクを入力" />
+    <button onclick="addTask()">追加</button>
+    <ul id="taskList"></ul>
+  </body>
+
+  <script>
+    let tasks = [
+      { name: "ドキュメントを読む", completed: true },
+      { name: "サンプルコードを書く", completed: true },
+    ]; // 初期タスク
+
+    // 新しいタスクを追加する関数
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const taskName = input.value.trim(); // 前後の空白を削除
+
+      if (taskName !== "") {
+        // 配列の末尾にタスクオブジェクトを追加
+        tasks.push({ name: taskName, completed: false });
+        input.value = ""; // 入力欄をクリア
+        updataTaskList(); // リストを更新
+      }
+    }
+
+    // タスクリストを更新する関数
+    function updataTaskList() {
+      const taskList = document.getElementById("taskList");
+      taskList.innerHTML = ""; // 既存のリストをクリア
+
+      // 配列のforEach メソッドを使ってタスクを表示
+      tasks.forEach((task, index) => {
+        const listItem = document.createElement("li"); // li要素作成
+
+        // タスクの状態に応じてクラスを設定
+        if (task.completed) {
+          listItem.classList.add("completed");
+        }
+
+        // リストアイテムの内容を設定
+        listItem.innerHTML = `
+        <input type="checkbox" onchange="toggleTask(${index})" ${task.completed ? "checked" : ""}>
+        <span>${task.name}</span>
+        <button onclick="removeTask(${index})">削除</button>
+        `;
+        taskList.appendChild(listItem);
+      });
+    }
+
+    // タスクの完了状態を切り替える関数
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed; // 完了状態を反転
+      updataTaskList(); // リストを更新
+    }
+
+    // タスクを削除する関数
+    function removeTask(index) {
+      // 配列のspliceメソッドを使ってタスクを削除
+      // indexから1つの要素を削除
+      tasks.splice(index, 1);
+      updataTaskList(); // リストを更新
+    }
+
+    // 初期表示
+    updataTaskList();
+  </script>
+</html>
+```
