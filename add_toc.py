@@ -130,7 +130,7 @@ def build_toc(headings: List[Tuple[int, str, str]], toc_title: str = "目次") -
     見出し2/3のTOCをMarkdownで生成。
     """
     lines: List[str] = []
-    lines.append(f"# {toc_title}")
+    lines.append(f"## {toc_title}")
     lines.append("")
 
     for level, title, anchor in headings:
