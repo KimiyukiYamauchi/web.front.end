@@ -7,10 +7,12 @@ sudo apt purge -y nodejs npm
 sudo apt update
 ```
 
-### NodeSource の LTS（例：22.x）を追加してインストール
+### NodeSource の LTS（例：24.x）を追加してインストール
+
+最新の LTS バージョンは https://nodejs.org で確認できます。
 
 ```
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
 
@@ -21,21 +23,25 @@ npm -v
 
 ## Visual Studio Code インストール
 
-### 1. Microsoft の GPG キーを取得
+### 1. 必要なパッケージと Microsoft の GPG キーを取得
 
 ```
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+sudo apt update
+sudo apt install -y wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+rm -f packages.microsoft.gpg
 ```
 
 ### 2. リポジトリを追加
 
 ```
-sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
 ```
 
 ### 3. VSCode をインストール
 
 ```
 sudo apt update
-sudo apt install code
+sudo apt install -y code
 ```
