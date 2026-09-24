@@ -31,7 +31,8 @@ TOC_END = "<!-- /TOC -->"
 
 
 # 見出し行の検出（コードブロック ``` の中は無視）
-HEADING_RE = re.compile(r"^(#{2,3})\s+(.*)$")
+# 重複した見出しのアンカー番号（-1, -2 ...）を正しく数えるため、# 〜 ###### をすべて拾う
+HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 
 
 def strip_md_inline(text: str) -> str:
@@ -58,54 +59,54 @@ def strip_md_inline(text: str) -> str:
 
 def github_slugify(heading_text: str) -> str:
     """
-    GitHubの見出しアンカーに“近い”slugを作ります。
+    GitHubの見出しアンカー（github-slugger と同じ規則）のslugを作ります。
 
-    ざっくりルール:
-    - 小文字化（英字のみ影響）
-    - 記号類は落とす
-    - 空白は '-' に
-    - '-' は連続を1つに
-    - 前後の '-' を除去
+    ルール:
+    - 小文字化
+    - 次の文字だけ残し、それ以外（記号・絵文字・①などの丸数字・全角スペース）は消す
+      文字(L) / 結合文字(M) / 数字(Nd, Nl) / 連結記号(Pc: _ など) / '-' / 半角スペース
+    - 半角スペースを1つずつ '-' に置き換える
+      （連続した '-' や先頭・末尾の '-' もそのまま残す）
 
-    ※ GitHub本家はさらに細かいので、見出しに記号が多い場合はズレる可能性があります。
+    例: "① Supabase でテーブルを作成" → "-supabase-でテーブルを作成"
     """
-    s = strip_md_inline(heading_text)
-    s = s.replace("\u3000", " ")  # 全角スペース→半角
-    s = s.casefold()  # lowerより広い（Unicode対応）
+    s = strip_md_inline(heading_text).lower()
 
-    # 許可する文字: 文字/数字/結合文字/スペース/ハイフン
     out = []
     for ch in s:
-        if ch == " " or ch == "-":
-            out.append(ch)
-            continue
         cat = unicodedata.category(ch)
-        if cat[0] in ("L", "N") or cat == "Mn":  # Letter/Number/Nonspacing_Mark
+        if ch in (" ", "-") or cat[0] in ("L", "M") or cat in ("Nd", "Nl", "Pc"):
             out.append(ch)
-        # それ以外（句読点・記号など）は捨てる
 
-    s2 = "".join(out).strip()
-    # 空白類→ハイフン
-    s2 = re.sub(r"\s+", "-", s2)
-    # ハイフン連続を潰す
-    s2 = re.sub(r"-{2,}", "-", s2)
-    # 前後のハイフンを削除
-    s2 = s2.strip("-")
-
-    return s2
+    return "".join(out).replace(" ", "-")
 
 
-def extract_headings(md: str) -> List[Tuple[int, str, str]]:
+def extract_headings(md: str, toc_title: str = "目次") -> List[Tuple[int, str, str]]:
     """
     Markdownから見出し（##, ###）を抽出。
     戻り値: [(level, raw_title, anchor), ...]
+
+    GitHubは同じアンカーが2回目以降に出ると "-1", "-2" ... を付けるので、
+    すべての見出し（先頭に入る目次の見出しも含む）を数えて同じ番号を付ける。
     """
     headings: List[Tuple[int, str, str]] = []
+    seen: dict[str, int] = {github_slugify(toc_title): 1}
 
     in_fenced = False
+    in_toc = False
     fence_re = re.compile(r"^\s*```")  # ```で始まる行
 
     for line in md.splitlines():
+        # 既存の目次（マーカー内）は数えない
+        if line.strip() == TOC_START:
+            in_toc = True
+            continue
+        if line.strip() == TOC_END:
+            in_toc = False
+            continue
+        if in_toc:
+            continue
+
         if fence_re.match(line):
             in_fenced = not in_fenced
             continue
@@ -119,7 +120,14 @@ def extract_headings(md: str) -> List[Tuple[int, str, str]]:
         hashes, title = m.group(1), m.group(2).strip()
         level = len(hashes)
         anchor = github_slugify(title)
-        if anchor:  # 空になるような見出しは無視
+        if anchor in seen:
+            n = seen[anchor]
+            seen[anchor] += 1
+            anchor = f"{anchor}-{n}"
+        else:
+            seen[anchor] = 1
+
+        if level in (2, 3) and anchor:  # 目次に載せるのは ## と ### だけ
             headings.append((level, title, anchor))
 
     return headings
@@ -167,7 +175,7 @@ def main() -> None:
 
     md = args.input.read_text(encoding="utf-8")
 
-    headings = extract_headings(md)
+    headings = extract_headings(md, toc_title=args.title)
     toc = build_toc(headings, toc_title=args.title)
     new_md = upsert_toc(md, toc)
 
