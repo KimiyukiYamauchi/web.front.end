@@ -83,8 +83,6 @@ my-react-app/
 ### 1.3 画面の文字を変えてみる
 
 ```tsx
-import React from "react";
-
 function App() {
   return <h1>Hello React + TypeScript (CRA)!</h1>;
 }
