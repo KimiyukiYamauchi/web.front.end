@@ -108,12 +108,26 @@ export default App;
 
 Reactでは、画面をコンポーネント（部品）に分割して作ります。コンポーネントは「UIを返す関数」です。
 
+`src/Hello.tsx`
+
 ```tsx
 function Hello() {
   return <h1>こんにちは、React！</h1>;
 }
 
 export default Hello;
+```
+
+`src/App.tsx`
+
+```tsx
+import Hello from "./Hello";
+
+function App() {
+  return <Hello />;
+}
+
+export default App;
 ```
 
 - コンポーネント名は **パスカルケース**（`Hello`, `UserCard` のように先頭大文字）にする
