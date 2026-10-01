@@ -278,6 +278,8 @@ function UserCard({ name, age, isStudent }: UserCardProps) {
 function App() {
   return <UserCard name="田中太郎" age={20} isStudent={true} />;
 }
+
+export default App;
 ```
 
 **ポイント**：`{isStudent && <p>学生です</p>}` は「isStudentがtrueなら右側を表示、falseなら何も表示しない」という頻出パターンです。第3回で学んだ論理演算子（`&&`）の応用だと考えると理解しやすいです。
@@ -309,6 +311,12 @@ function Counter() {
     </div>
   );
 }
+
+function App() {
+  return <Counter />;
+}
+
+export default App;
 ```
 
 - `const [count, setCount] = useState(0);` ← 配列の分割代入（第3回の復習）
@@ -331,6 +339,12 @@ function NameInput() {
     </div>
   );
 }
+
+function App() {
+  return <NameInput />;
+}
+
+export default App;
 ```
 
 この「`value` と `onChange` をセットでstateにつなげる」書き方は、第8回で「制御コンポーネント」として詳しく扱います。ここでは「入力欄の中身もstateで管理できる」ということだけ押さえておきましょう。
