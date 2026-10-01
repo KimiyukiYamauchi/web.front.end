@@ -9,8 +9,9 @@
 - [1. 環境構築（CRA + TypeScriptテンプレート）](#1-環境構築cra--typescriptテンプレート)
   - [1.1 プロジェクトの作成](#11-プロジェクトの作成)
   - [1.2 フォルダ構成](#12-フォルダ構成)
-  - [1.3 画面の文字を変えてみる](#13-画面の文字を変えてみる)
-  - [1.4 よく使うnpmスクリプト](#14-よく使うnpmスクリプト)
+  - [1.3 VS Codeでエラーが出る場合の対処](#13-vs-codeでエラーが出る場合の対処)
+  - [1.4 画面の文字を変えてみる](#14-画面の文字を変えてみる)
+  - [1.5 よく使うnpmスクリプト](#15-よく使うnpmスクリプト)
 - [2. コンポーネントとJSX](#2-コンポーネントとjsx)
   - [2.1 コンポーネントとは](#21-コンポーネントとは)
   - [2.2 JSXの基本ルール](#22-jsxの基本ルール)
@@ -80,7 +81,40 @@ my-react-app/
 
 **最初は `src/App.tsx` と `src/index.tsx` だけ意識していればOK**です。
 
-### 1.3 画面の文字を変えてみる
+### 1.3 VS Codeでエラーが出る場合の対処
+
+CRAで作成したプロジェクトをVS Codeで開くと、`tsconfig.json` などに赤い波線（エラー）が表示されることがあります。これは、CRAがインストールするTypeScript（4.x）と、VS Codeに組み込まれている新しいTypeScriptとでバージョンが異なるためです。次の2点を修正しておきましょう。
+
+**① `tsconfig.json` の `target` を変更する**
+
+新しいTypeScriptでは `target: "es5"` が非推奨になっているため、`es2020` に変更します。
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2020",
+    ...
+  }
+}
+```
+
+**② VS Codeがプロジェクト内のTypeScriptを使うように設定する**
+
+プロジェクト直下に `.vscode/settings.json` を作成し、次の内容を記述します。
+
+```json
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
+```
+
+- `typescript.tsdk`：VS Codeが使うTypeScriptを、プロジェクトの `node_modules` 内のものに指定する
+- `typescript.enablePromptUseWorkspaceTsdk`：プロジェクトを開いたときに「ワークスペースのバージョンを使用するか」を確認するダイアログを表示する
+
+設定後、VS Codeでプロジェクトを開き直し、表示されたダイアログで「許可」を選びます（またはコマンドパレットで **TypeScript: Select TypeScript Version** →「ワークスペースのバージョンを使用」を選択）。
+
+### 1.4 画面の文字を変えてみる
 
 ```tsx
 function App() {
@@ -92,7 +126,7 @@ export default App;
 
 `src/App.tsx` を保存すると、ブラウザの表示が自動で切り替わることを確認しましょう。
 
-### 1.4 よく使うnpmスクリプト
+### 1.5 よく使うnpmスクリプト
 
 | コマンド        | 内容                                                  |
 | --------------- | ----------------------------------------------------- |
