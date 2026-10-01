@@ -247,6 +247,8 @@ function App() {
     </div>
   );
 }
+
+export default App;
 ```
 
 - `<Greeting name="佐藤" />` のように、HTML属性のような形でpropsを渡す
