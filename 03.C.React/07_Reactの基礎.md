@@ -50,6 +50,9 @@
 
 ```bash
 npx create-react-app my-react-app --template typescript
+```
+
+```bash
 cd my-react-app
 npm start
 ```
@@ -93,11 +96,11 @@ export default App;
 
 ### 1.4 よく使うnpmスクリプト
 
-| コマンド | 内容 |
-|---|---|
-| `npm start` | 開発サーバー起動（`http://localhost:3000`） |
+| コマンド        | 内容                                                  |
+| --------------- | ----------------------------------------------------- |
+| `npm start`     | 開発サーバー起動（`http://localhost:3000`）           |
 | `npm run build` | 本番用ビルド（`build/` フォルダに静的ファイルを生成） |
-| `npm test` | テスト実行 |
+| `npm test`      | テスト実行                                            |
 
 ---
 
@@ -140,12 +143,12 @@ function Profile() {
 
 主な違い：
 
-| HTML | JSX | 理由 |
-|---|---|---|
-| `class="..."` | `className="..."` | `class` はJavaScriptの予約語のため |
-| `<input>`（閉じタグ省略可） | `<input />`（自己終了タグ必須） | JSXはすべてのタグを閉じる必要がある |
-| `onclick="..."` | `onClick={...}` | イベント名はキャメルケース（第8回で詳しく扱う） |
-| 値埋め込みなし | `{式}` | `{}` の中にJavaScriptの式を書ける |
+| HTML                        | JSX                             | 理由                                            |
+| --------------------------- | ------------------------------- | ----------------------------------------------- |
+| `class="..."`               | `className="..."`               | `class` はJavaScriptの予約語のため              |
+| `<input>`（閉じタグ省略可） | `<input />`（自己終了タグ必須） | JSXはすべてのタグを閉じる必要がある             |
+| `onclick="..."`             | `onClick={...}`                 | イベント名はキャメルケース（第8回で詳しく扱う） |
+| 値埋め込みなし              | `{式}`                          | `{}` の中にJavaScriptの式を書ける               |
 
 ### 2.3 コンポーネントは1つの要素を返す
 
@@ -275,10 +278,7 @@ function NameInput() {
 
   return (
     <div>
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+      <input value={name} onChange={(e) => setName(e.target.value)} />
       <p>入力中の名前: {name}</p>
     </div>
   );
