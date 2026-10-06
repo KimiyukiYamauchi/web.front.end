@@ -60,7 +60,10 @@ const fruits1 = ["apple", "banana"];
 const fruits2 = ["date", "elderberry"];
 const combined = [...fruits1, ...fruits2];
 
+console.log(combined); // ["apple", "banana", "date", "elderberry"]
+
 const [first, second, ...restFruits] = combined;
+console.log(first, second, restFruits); // apple banana ["date", "elderberry"]
 ```
 
 ### 1.3 `forEach` / `map` / `filter` / `reduce`（重要・頻出）
@@ -155,38 +158,103 @@ function saveTask(task) {
   tasks.push(task);
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+saveTask("買い物に行く");
+console.log(localStorage.getItem("tasks")); // ["買い物に行く"]（実行するたびに増える）
 ```
+
+※ `localStorage` はブラウザの機能なので、ブラウザの開発者ツールのコンソールで実行してください（Node.jsでは動きません）。
 
 ---
 
 ## 3. DOM操作の基本
 
+DOM操作は対象となるHTML要素が必要なので、以下はHTMLファイルとして保存し、ブラウザで開いて試してください（結果は開発者ツールのコンソールに表示されます）。
+
 ### 3.1 要素の取得
 
-```js
-const element = document.getElementById("myElement");
-const elements = document.getElementsByClassName("myClass");
-const element2 = document.querySelector(".container > div");
-const elements2 = document.querySelectorAll("ul li");
+```html
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>要素の取得</title>
+  </head>
+  <body>
+    <p id="myElement">idで取得する要素</p>
+    <p class="myClass">classで取得する要素1</p>
+    <p class="myClass">classで取得する要素2</p>
+    <div class="container">
+      <div>.container直下のdiv</div>
+    </div>
+    <ul>
+      <li>項目1</li>
+      <li>項目2</li>
+      <li>項目3</li>
+    </ul>
+
+    <script>
+      const element = document.getElementById("myElement");
+      const elements = document.getElementsByClassName("myClass");
+      const element2 = document.querySelector(".container > div");
+      const elements2 = document.querySelectorAll("ul li");
+
+      console.log(element.textContent); // idで取得する要素
+      console.log(elements.length); // 2
+      console.log(element2.textContent); // .container直下のdiv
+      console.log(elements2.length); // 3
+    </script>
+  </body>
+</html>
 ```
 
 ### 3.2 要素の作成と追加
 
-```js
-const newDiv = document.createElement("div");
-newDiv.textContent = "新しい要素";
-document.body.appendChild(newDiv);
+```html
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>要素の作成と追加</title>
+  </head>
+  <body>
+    <h1>要素の作成と追加</h1>
+
+    <script>
+      const newDiv = document.createElement("div");
+      newDiv.textContent = "新しい要素";
+      document.body.appendChild(newDiv);
+    </script>
+  </body>
+</html>
 ```
 
 ### 3.3 イベント処理
 
-```js
-document.getElementById("myButton").addEventListener("click", (event) => {
-  console.log("クリックされました！");
-  event.preventDefault(); // デフォルトの動作を防ぐ
-});
+```html
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>イベント処理</title>
+  </head>
+  <body>
+    <form>
+      <input id="myInput" placeholder="何か入力してください" />
+      <button id="myButton">送信</button>
+    </form>
 
-const inputValue = document.getElementById("myInput").value;
+    <script>
+      document.getElementById("myButton").addEventListener("click", (event) => {
+        console.log("クリックされました！");
+        event.preventDefault(); // デフォルトの動作（フォーム送信によるページ再読み込み）を防ぐ
+
+        const inputValue = document.getElementById("myInput").value;
+        console.log(`入力値: ${inputValue}`);
+      });
+    </script>
+  </body>
+</html>
 ```
 
 ---
@@ -264,6 +332,65 @@ function renderMemoList() {
     memoListEl.appendChild(li);
   });
 }
+```
+
+**動作確認用（1ファイル版）**：上の `index.html` と `js/index.js` は2つ揃って初めて動きます。手元ですぐ試したい場合は、次の1ファイルにまとめた版を `memo.html` などとして保存し、ブラウザで開いてください。
+
+```html
+<!doctype html>
+<html lang="ja">
+  <head>
+    <title>簡単メモアプリ</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <h1 id="title">簡単メモアプリ</h1>
+    <input id="add-text" />
+    <button id="add-button">追加</button>
+    <div class="container">
+      <p>メモ一覧</p>
+      <ul id="memo-list"></ul>
+    </div>
+
+    <script>
+      let memoList = [];
+
+      const addButton = document.getElementById("add-button");
+      const addText = document.getElementById("add-text");
+      const memoListEl = document.getElementById("memo-list");
+
+      addButton.addEventListener("click", () => {
+        const text = addText.value.trim();
+        if (text === "") return;
+
+        memoList.push(text);
+        addText.value = "";
+        renderMemoList();
+      });
+
+      function renderMemoList() {
+        memoListEl.innerHTML = "";
+
+        memoList.forEach((memo, index) => {
+          const li = document.createElement("li");
+          const p = document.createElement("p");
+          p.textContent = memo;
+
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "削除";
+          deleteButton.addEventListener("click", () => {
+            memoList = memoList.filter((_, i) => i !== index);
+            renderMemoList();
+          });
+
+          li.appendChild(p);
+          li.appendChild(deleteButton);
+          memoListEl.appendChild(li);
+        });
+      }
+    </script>
+  </body>
+</html>
 ```
 
 ### 4.3 手順（`memo.js` リポジトリの提出フロー）
