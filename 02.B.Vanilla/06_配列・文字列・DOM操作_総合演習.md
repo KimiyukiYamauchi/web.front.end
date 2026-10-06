@@ -272,6 +272,18 @@ DOM操作は対象となるHTML要素が必要なので、以下はHTMLファイ
 
 ### 4.2 ひな形（`memo.js` リポジトリの構成）
 
+リポジトリの主なファイル構成：
+
+```text
+memo.js/
+├── README.md
+├── index.html
+├── css/
+│   └── styles.css
+└── js/
+    └── index.js
+```
+
 `index.html`（配布済みのひな形）：
 
 ```html
@@ -282,20 +294,55 @@ DOM操作は対象となるHTML要素が必要なので、以下はHTMLファイ
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
+
   <body>
     <h1 id="title">簡単メモアプリ</h1>
     <input id="add-text" />
     <button id="add-button">追加</button>
     <div class="container">
       <p>メモ一覧</p>
-      <ul id="memo-list"></ul>
+      <ul id="memo-list">
+        <li>
+          <div>
+            <p>本を読む</p>
+            <button>削除</button>
+          </div>
+        </li>
+      </ul>
     </div>
     <script src="js/index.js"></script>
   </body>
 </html>
 ```
 
-`js/index.js` の実装イメージ（配列＋DOM操作＋JSON保存の組み合わせ）は [07_総合演習.実装例.md](07_総合演習.実装例.md) にあります。
+`<ul id="memo-list">` の中の `<li>` は、メモ1件分の表示イメージです。JavaScriptでメモを追加するときは、この `<li><div><p>…</p><button>削除</button></div></li>` と同じ構造の要素を作ると、`css/styles.css` のスタイルがそのまま適用されます。
+
+`css/styles.css`（配布済み）：
+
+```css
+.container {
+  border: solid 1px #ccc;
+  padding: 16px;
+  margin: 8px;
+}
+
+li > div {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  margin-left: 16px;
+}
+```
+
+`js/index.js`（配布済み。ここに処理を書いていく）：
+
+```js
+// ここに処理を記述する
+```
+
+`js/index.js` の実装イメージ（配列＋DOM操作の組み合わせ）は [07_総合演習.実装例.md](07_総合演習.実装例.md) にあります。
 
 ### 4.3 手順（`memo.js` リポジトリの提出フロー）
 
