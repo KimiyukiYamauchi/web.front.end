@@ -128,6 +128,7 @@ console.log(str.indexOf("World")); // 7
 ```js
 const csv = "apple,banana,cherry";
 const fruitsArray = csv.split(","); // ["apple", "banana", "cherry"]
+console.log(fruitsArray); // ["apple", "banana", "cherry"]
 console.log(fruitsArray.join(" / ")); // "apple / banana / cherry"
 
 const str = "Hello, world! Hello again!";
