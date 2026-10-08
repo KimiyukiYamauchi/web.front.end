@@ -9,10 +9,11 @@
 - [1. Vanilla JS版とReact版の対応整理](#1-vanilla-js版とreact版の対応整理)
 - [2. 総合演習：簡易メモアプリ（React版）](#2-総合演習簡易メモアプリreact版)
   - [2.1 要件](#21-要件)
-  - [2.2 手順（`memo.react` リポジトリの提出フロー）](#22-手順memoreact-リポジトリの提出フロー)
-  - [2.3 追加機能の実装ヒント](#23-追加機能の実装ヒント)
-  - [2.4 実装イメージ](#24-実装イメージ)
-  - [2.5 実装のチェックポイント](#25-実装のチェックポイント)
+  - [2.2 ひな形（`memo.react.tl` リポジトリの構成）](#22-ひな形memoreacttl-リポジトリの構成)
+  - [2.3 手順（`memo.react.tl` リポジトリの提出フロー）](#23-手順memoreacttl-リポジトリの提出フロー)
+  - [2.4 追加機能の実装ヒント](#24-追加機能の実装ヒント)
+  - [2.5 実装イメージ](#25-実装イメージ)
+  - [2.6 実装のチェックポイント](#26-実装のチェックポイント)
 - [3. 発展課題（時間が余ったら／持ち帰り課題）](#3-発展課題時間が余ったら持ち帰り課題)
 - [モジュールC 総復習（第7〜9回）](#モジュールc-総復習第79回)
 - [次回予告](#次回予告)
@@ -70,9 +71,71 @@
 4. **件数表示**：「メモ一覧（3件）」のようにメモの件数を表示する。0件のときは「メモはまだありません」と表示する
 5. **編集機能**：各メモに「編集」ボタンを表示する。クリックするとそのメモが入力欄に切り替わり、「保存」で内容を更新、「キャンセル」で元に戻す
 
-### 2.2 手順（`memo.react` リポジトリの提出フロー）
+### 2.2 ひな形（`memo.react.tl` リポジトリの構成）
 
-1. **リポジトリをクローンする**（`memo.react` リポジトリ）
+ひな形は [memo.react.tl](https://github.com/KimiyukiYamauchi/memo.react.tl) リポジトリの `main` ブランチです。第7回で作成したViteのプロジェクトと同じ構成になっています。
+
+```text
+memo.react.tl/
+├── README.md
+├── index.html
+├── package.json
+└── src/
+    ├── main.tsx          ← 変更不要
+    ├── index.css         ← 変更不要
+    ├── App.tsx           ← ここに処理を書いていく
+    └── App.module.css    ← スタイル（自由にアレンジしてかまいません）
+```
+
+`src/App.tsx`（配布済みのひな形）：
+
+```tsx
+import styles from "./App.module.css";
+
+// ここに処理を記述する
+// （下のJSXは完成イメージです。stateとmap()を使って書き換えていきましょう）
+
+function App() {
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>簡単メモアプリ</h1>
+
+      <div className={styles.form}>
+        <input className={styles.input} placeholder="メモを入力" />
+        <button className={styles.addButton}>追加</button>
+      </div>
+
+      <p className={styles.subtitle}>メモ一覧（1件）</p>
+      <ul className={styles.memoList}>
+        <li className={styles.memoItem}>
+          <div>
+            <p className={styles.memoText}>買い物に行く</p>
+            <p className={styles.date}>2026/10/8 10:00:00</p>
+          </div>
+          <div className={styles.buttons}>
+            <button>編集</button>
+            <button>削除</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`<ul>` の中の `<li>` は、メモ1件分の表示イメージです。`map()` でメモを表示するときは、この `<li>` と同じ構造・クラス名にすると、`src/App.module.css` のスタイルがそのまま適用されます。`App.module.css` には、エラー表示用の `.error` や `.errorMessage`、0件表示用の `.empty` などのクラスもあらかじめ用意されています（中身は [10_総合演習.実装例.md](10_総合演習.実装例.md) の `App.module.css` と同じです）。
+
+### 2.3 手順（`memo.react.tl` リポジトリの提出フロー）
+
+1. **リポジトリをクローンする**（[memo.react.tl](https://github.com/KimiyukiYamauchi/memo.react.tl) リポジトリ）
+
+   ```bash
+   git clone https://github.com/KimiyukiYamauchi/memo.react.tl.git
+   cd memo.react.tl
+   ```
+
 2. **ブランチを作成して切り替える**（自分の学生番号を使用）
 
    ```bash
@@ -102,7 +165,7 @@
    # 例： git push origin t26001
    ```
 
-### 2.3 追加機能の実装ヒント
+### 2.4 追加機能の実装ヒント
 
 どの機能も、第7回・第8回で学んだ知識の組み合わせで作れます。
 
@@ -161,11 +224,11 @@ const [editText, setEditText] = useState("");
 - 「保存」ボタン：`map` で対象のメモだけ `{ ...memo, text: editText }` に置き換えた新しい配列を作り、`setEditingId(null)` で編集モードを終える
 - 「キャンセル」ボタン：`setEditingId(null)` だけでよい（`memoList` は変更しない）
 
-### 2.4 実装イメージ
+### 2.5 実装イメージ
 
 実装イメージ（`App.tsx` と `App.module.css`）は [10_総合演習.実装例.md](10_総合演習.実装例.md) にあります。
 
-### 2.5 実装のチェックポイント
+### 2.6 実装のチェックポイント
 
 - `memoList.push(...)` のように配列を直接書き換えていないか（必ず `setMemoList([...memoList, ...])` の形にする）
 - 編集の保存で `memo.text = editText` のようにオブジェクトを直接書き換えていないか（`map` とスプレッド構文で新しいオブジェクトを作る）
