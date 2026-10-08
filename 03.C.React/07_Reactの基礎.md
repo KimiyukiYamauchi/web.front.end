@@ -6,12 +6,11 @@
 
 - [今回のゴール](#今回のゴール)
 - [モジュールCの位置づけ](#モジュールcの位置づけ)
-- [1. 環境構築（CRA + TypeScriptテンプレート）](#1-環境構築cra--typescriptテンプレート)
+- [1. 環境構築（Vite + TypeScriptテンプレート）](#1-環境構築vite--typescriptテンプレート)
   - [1.1 プロジェクトの作成](#11-プロジェクトの作成)
   - [1.2 フォルダ構成](#12-フォルダ構成)
-  - [1.3 VS Codeでエラーが出る場合の対処](#13-vs-codeでエラーが出る場合の対処)
-  - [1.4 画面の文字を変えてみる](#14-画面の文字を変えてみる)
-  - [1.5 よく使うnpmスクリプト](#15-よく使うnpmスクリプト)
+  - [1.3 画面の文字を変えてみる](#13-画面の文字を変えてみる)
+  - [1.4 よく使うnpmスクリプト](#14-よく使うnpmスクリプト)
 - [2. コンポーネントとJSX](#2-コンポーネントとjsx)
   - [2.1 コンポーネントとは](#21-コンポーネントとは)
   - [2.2 JSXの基本ルール](#22-jsxの基本ルール)
@@ -33,7 +32,7 @@
 
 ## 今回のゴール
 
-- Create React App（TypeScriptテンプレート）でReactプロジェクトを作成し、開発サーバーを起動できる
+- Vite（TypeScriptテンプレート）でReactプロジェクトを作成し、開発サーバーを起動できる
 - コンポーネントとJSXの基本ルールを理解する
 - props（親から子へのデータの受け渡し）を理解する
 - state（`useState`）で「変化する値」を扱えるようになる
@@ -45,80 +44,55 @@
 
 ---
 
-## 1. 環境構築（CRA + TypeScriptテンプレート）
+## 1. 環境構築（Vite + TypeScriptテンプレート）
 
 ### 1.1 プロジェクトの作成
 
 ```bash
-npx create-react-app my-react-app --template typescript
+npm create vite@latest my-react-app -- --template react-ts
 ```
 
 ```bash
 cd my-react-app
-npm start
+npm install
+npm run dev
 ```
 
-`npm start` で開発サーバーが起動し、`http://localhost:3000` に自動でブラウザが開きます。ファイルを保存すると自動で画面がリロードされます（ホットリロード）。
+`npm run dev` で開発サーバーが起動し、ターミナルに `http://localhost:5173/` と表示されます。このURLをブラウザで開いて確認しましょう（`o` キーを押してEnterすると、ブラウザが自動で開きます）。ファイルを保存すると自動で画面が更新されます（ホットリロード／HMR）。
+
+開発サーバーを止めるときは、ターミナルで `Ctrl + C` を押します。
 
 ### 1.2 フォルダ構成
 
-Create React App + TypeScript で作ると、だいたい次のような構成になります。
+Vite + TypeScript（`react-ts` テンプレート）で作ると、だいたい次のような構成になります。
 
 ```text
 my-react-app/
-  ├─ node_modules/      ← ライブラリ群（さわらない）
-  ├─ public/            ← 画像や index.html など
+  ├─ node_modules/       ← ライブラリ群（さわらない）
+  ├─ public/             ← favicon などの静的ファイル
   ├─ src/                ← 自分が主に編集する場所
-  │   ├─ App.tsx        ← メインのコンポーネント
-  │   ├─ index.tsx      ← Reactを画面に描画するエントリ
-  │   ├─ react-app-env.d.ts
-  │   ├─ reportWebVitals.ts
-  │   └─ setupTests.ts  など
-  ├─ package.json       ← 使用ライブラリやスクリプト
-  ├─ tsconfig.json      ← TypeScriptの設定
+  │   ├─ assets/         ← 画像など
+  │   ├─ App.tsx         ← メインのコンポーネント
+  │   ├─ App.css
+  │   ├─ main.tsx        ← Reactを画面に描画するエントリ
+  │   └─ index.css
+  ├─ index.html          ← アプリの入口となるHTML（プロジェクト直下にある）
+  ├─ package.json        ← 使用ライブラリやスクリプト
+  ├─ tsconfig.json       ← TypeScriptの設定（tsconfig.app.json などを参照）
+  ├─ vite.config.ts      ← Viteの設定
+  ├─ eslint.config.js    ← ESLint（コードチェック）の設定
   └─ README.md
 ```
 
-**最初は `src/App.tsx` と `src/index.tsx` だけ意識していればOK**です。
+**最初は `src/App.tsx` と `src/main.tsx` だけ意識していればOK**です。
 
-### 1.3 VS Codeでエラーが出る場合の対処
+### 1.3 画面の文字を変えてみる
 
-CRAで作成したプロジェクトをVS Codeで開くと、`tsconfig.json` などに赤い波線（エラー）が表示されることがあります。これは、CRAがインストールするTypeScript（4.x）と、VS Codeに組み込まれている新しいTypeScriptとでバージョンが異なるためです。次の2点を修正しておきましょう。
-
-**① `tsconfig.json` の `target` を変更する**
-
-新しいTypeScriptでは `target: "es5"` が非推奨になっているため、`es2020` に変更します。
-
-```json
-{
-  "compilerOptions": {
-    "target": "es2020",
-    ...
-  }
-}
-```
-
-**② VS Codeがプロジェクト内のTypeScriptを使うように設定する**
-
-プロジェクト直下に `.vscode/settings.json` を作成し、次の内容を記述します。
-
-```json
-{
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
-}
-```
-
-- `typescript.tsdk`：VS Codeが使うTypeScriptを、プロジェクトの `node_modules` 内のものに指定する
-- `typescript.enablePromptUseWorkspaceTsdk`：プロジェクトを開いたときに「ワークスペースのバージョンを使用するか」を確認するダイアログを表示する
-
-設定後、VS Codeでプロジェクトを開き直し、表示されたダイアログで「許可」を選びます（またはコマンドパレットで **TypeScript: Select TypeScript Version** →「ワークスペースのバージョンを使用」を選択）。
-
-### 1.4 画面の文字を変えてみる
+`src/App.tsx` の中身をすべて消して、次のように書き換えます。
 
 ```tsx
 function App() {
-  return <h1>Hello React + TypeScript (CRA)!</h1>;
+  return <h1>Hello React + TypeScript (Vite)!</h1>;
 }
 
 export default App;
@@ -126,13 +100,14 @@ export default App;
 
 `src/App.tsx` を保存すると、ブラウザの表示が自動で切り替わることを確認しましょう。
 
-### 1.5 よく使うnpmスクリプト
+### 1.4 よく使うnpmスクリプト
 
-| コマンド        | 内容                                                  |
-| --------------- | ----------------------------------------------------- |
-| `npm start`     | 開発サーバー起動（`http://localhost:3000`）           |
-| `npm run build` | 本番用ビルド（`build/` フォルダに静的ファイルを生成） |
-| `npm test`      | テスト実行                                            |
+| コマンド          | 内容                                                       |
+| ----------------- | ---------------------------------------------------------- |
+| `npm run dev`     | 開発サーバー起動（`http://localhost:5173`）                |
+| `npm run build`   | 本番用ビルド（`dist/` フォルダに静的ファイルを生成）       |
+| `npm run preview` | ビルド結果（`dist/`）をローカルで確認                      |
+| `npm run lint`    | ESLintでコードをチェック                                   |
 
 ---
 
@@ -404,7 +379,7 @@ export default App;
 
 ## まとめ・次回予告
 
-- CRA + TypeScriptでReactプロジェクトを作成し、`npm start` で開発サーバーを起動できるようになった
+- Vite + TypeScriptでReactプロジェクトを作成し、`npm run dev` で開発サーバーを起動できるようになった
 - コンポーネントは「UIを返す関数」であり、JSXにはHTMLとは異なるルール（className、自己終了タグ、`{}`埋め込み）があることを学んだ
 - props（親→子への読み取り専用データ）とstate（コンポーネント自身が持つ、変化する値）の違いを理解した
 - 自己紹介カードで、props・useStateを組み合わせて実装した
@@ -417,3 +392,4 @@ export default App;
 - 同：https://ja.react.dev/learn/your-first-component
 - 同：https://ja.react.dev/learn/passing-props-to-a-component
 - 同：https://ja.react.dev/learn/state-a-components-memory
+- Vite公式ドキュメント（日本語）：https://ja.vite.dev/guide/

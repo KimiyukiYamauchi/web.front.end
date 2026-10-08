@@ -68,7 +68,7 @@ JavaScript の基礎から React、Next.js（TypeScript）までを段階的に�
 
 | ファイル | 内容 |
 | --- | --- |
-| [第7回 Reactの基礎](03.C.React/07_Reactの基礎.md) | 環境構築（CRA + TypeScript）、コンポーネントとJSX、props、state、自己紹介カード |
+| [第7回 Reactの基礎](03.C.React/07_Reactの基礎.md) | 環境構築（Vite + TypeScript）、コンポーネントとJSX、props、state、自己紹介カード |
 | [第8回 イベント処理・リスト表示・スタイリング](03.C.React/08_イベント処理・リスト表示・スタイリング.md) | イベントハンドリング、制御コンポーネント、`map()` によるリスト表示、CSS Modules、買い物リスト |
 | [第9回 総合演習：メモアプリ（React版）](03.C.React/09_総合演習_メモアプリReact版.md) | Vanilla JS版との対応整理、メモアプリ（React版）、発展課題 |
 | [第9回 総合演習 実装例](03.C.React/10_総合演習.実装例.md) | メモアプリ（React版）の `App.tsx` / `App.module.css` 実装例 |
