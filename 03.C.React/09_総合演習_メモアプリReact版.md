@@ -32,18 +32,18 @@
 
 第6回で作ったメモアプリ（Vanilla JS版）を思い出しながら、React版でどう書き換わるかを整理します。
 
-| Vanilla JS（第6回） | React |
-|---|---|
-| `let memoList = [];` | `const [memoList, setMemoList] = useState<string[]>([]);` |
-| `document.getElementById()` | 基本的に使用しない（JSXとstateで完結する） |
-| `input.value` | `value={inputText}`（制御コンポーネント） |
-| `addButton.addEventListener("click", ...)` | `<button onClick={handleAdd}>` |
-| `innerHTML` で組み立てる | JSXで宣言的に書く |
-| `memoList.push(text)` | `setMemoList([...memoList, text])` |
-| `memoList.filter((_, i) => i !== index)` | 同じ（`filter`はReactでも同様に使う） |
-| `memoList[i] = newText`（要素を書き換える） | `setMemoList(memoList.map(...))`（`map`で新しい配列を作る） |
-| `input.classList.add("error")` | `className={hasError ? ... : ...}`（stateでクラスを切り替える） |
-| `renderMemoList()`（手動で画面を再構築） | **不要**（stateが変わると自動的に再描画される） |
+| Vanilla JS（第6回）                         | React                                                           |
+| ------------------------------------------- | --------------------------------------------------------------- |
+| `let memoList = [];`                        | `const [memoList, setMemoList] = useState<string[]>([]);`       |
+| `document.getElementById()`                 | 基本的に使用しない（JSXとstateで完結する）                      |
+| `input.value`                               | `value={inputText}`（制御コンポーネント）                       |
+| `addButton.addEventListener("click", ...)`  | `<button onClick={handleAdd}>`                                  |
+| `innerHTML` で組み立てる                    | JSXで宣言的に書く                                               |
+| `memoList.push(text)`                       | `setMemoList([...memoList, text])`                              |
+| `memoList.filter((_, i) => i !== index)`    | 同じ（`filter`はReactでも同様に使う）                           |
+| `memoList[i] = newText`（要素を書き換える） | `setMemoList(memoList.map(...))`（`map`で新しい配列を作る）     |
+| `input.classList.add("error")`              | `className={hasError ? ... : ...}`（stateでクラスを切り替える） |
+| `renderMemoList()`（手動で画面を再構築）    | **不要**（stateが変わると自動的に再描画される）                 |
 
 **この「手動で画面を作り直す関数が不要になる」という点こそが、ReactがVanilla JSと最も違うところです。** 実装に入る前に、この感覚をもう一度確認しておきましょう。
 
@@ -125,7 +125,7 @@ function App() {
 export default App;
 ```
 
-`<ul>` の中の `<li>` は、メモ1件分の表示イメージです。`map()` でメモを表示するときは、この `<li>` と同じ構造・クラス名にすると、`src/App.module.css` のスタイルがそのまま適用されます。`App.module.css` には、エラー表示用の `.error` や `.errorMessage`、0件表示用の `.empty` などのクラスもあらかじめ用意されています（中身は [10_総合演習.実装例.md](10_総合演習.実装例.md) の `App.module.css` と同じです）。
+`<ul>` の中の `<li>` は、メモ1件分の表示イメージです。`map()` でメモを表示するときは、この `<li>` と同じ構造・クラス名にすると、`src/App.module.css` のスタイルがそのまま適用されます。`App.module.css` には、エラー表示用の `.error` や `.errorMessage`、0件表示用の `.empty` などのクラスもあらかじめ用意されています（中身は [10\_総合演習.実装例.md](10_総合演習.実装例.md) の `App.module.css` と同じです）。
 
 ### 2.3 手順（`memo.react.tl` リポジトリの提出フロー）
 
@@ -179,7 +179,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
-<input onKeyDown={handleKeyDown} /* value・onChange も忘れずに */ />
+<input onKeyDown={handleKeyDown} /* value・onChange も忘れずに */ />;
 ```
 
 **2. 作成日時の表示**（第8回3.3のオブジェクトの配列）
@@ -202,8 +202,12 @@ setMemoList([
 ```tsx
 const [hasError, setHasError] = useState(false);
 
-<input className={hasError ? `${styles.input} ${styles.error}` : styles.input} />
-{hasError && <p className={styles.errorMessage}>メモを入力してください</p>}
+<input
+  className={hasError ? `${styles.input} ${styles.error}` : styles.input}
+/>;
+{
+  hasError && <p className={styles.errorMessage}>メモを入力してください</p>;
+}
 ```
 
 **4. 件数表示**
@@ -226,7 +230,7 @@ const [editText, setEditText] = useState("");
 
 ### 2.5 実装イメージ
 
-実装イメージ（`App.tsx` と `App.module.css`）は [10_総合演習.実装例.md](10_総合演習.実装例.md) にあります。
+実装イメージ（`App.tsx` と `App.module.css`）は [10\_総合演習.実装例.md](10_総合演習.実装例.md) にあります。
 
 ### 2.6 実装のチェックポイント
 
@@ -247,16 +251,26 @@ const [editText, setEditText] = useState("");
 - 重要なメモにチェックをつけ、背景色を変える（`Memo` 型に `important: boolean` を追加。第8回3.3のトグルの応用）
 - 編集中にEnterキーで保存、Escキーでキャンセルできるようにする
 - メモを `localStorage` に保存し、ページを再読み込みしても消えないようにする（第6回2.3のJSON.stringify/JSON.parseの考え方をReactの `useEffect` と組み合わせる。`useEffect` は今後の書籍ハンズオンで登場します）
+- 「重要なメモだけ表示」の切り替えボタンをつける  
+  （表示用の配列に filter を重ねる。検索や並び替えと組み合わせても正しく動くようにする
+- 重要なメモを常に一覧の上に表示する  
+  （sort の比較関数で important を先に比べ、同じなら作成順で比べる）
+- 入力欄に文字数を表示し、50文字を超えたら追加できないようにする  
+  （state から input.length を計算して表示する。上限を超えたらエラー表示にするか、ボタンを disabled にする）
+- 編集したメモに「更新日時」を表示する  
+  （Memo 型に updatedAt?: string を追加し、保存時に { ...memo, text, updatedAt } で更新する。一度も編集していないメモには表示しない）
+- メモ1件分の表示を MemoItem コンポーネントに分ける  
+  （props で memo と onDelete などのイベント関数を渡す。コンポーネントの分割と props の型定義を練習できる）
 
 ---
 
 ## モジュールC 総復習（第7〜9回）
 
-| 回 | テーマ | 一言でいうと |
-|---|---|---|
-| 第7回 | Reactの基礎 | コンポーネント・JSX・props・useStateという部品の作り方 |
+| 回    | テーマ                                 | 一言でいうと                                             |
+| ----- | -------------------------------------- | -------------------------------------------------------- |
+| 第7回 | Reactの基礎                            | コンポーネント・JSX・props・useStateという部品の作り方   |
 | 第8回 | イベント処理・リスト表示・スタイリング | ユーザー操作への反応と、配列データの表示・見た目の整え方 |
-| 第9回 | 総合演習：メモアプリ（React版） | ここまでの知識を組み合わせて、1つのアプリを完成させる |
+| 第9回 | 総合演習：メモアプリ（React版）        | ここまでの知識を組み合わせて、1つのアプリを完成させる    |
 
 Vanilla JS（モジュールB）と比べると、Reactは「DOMを直接操作する」代わりに「**stateを更新すれば、画面は勝手についてくる**」という考え方に大きく変わりました。この考え方は、第10回以降のNext.jsハンズオンでも一貫して使われます。
 
