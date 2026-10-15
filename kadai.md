@@ -1,8 +1,8 @@
 # 期末課題作成
 
-## 1. 要件
+## 1. 課題要件
 
-以下の要件をすべて満たす Web アプリ を作成してください。
+以下の要件をすべて満たす Web アプリを作成してください。
 
 使用技術
 
@@ -13,22 +13,22 @@
     - App Router
   - スタイル設定
     - globals.css
-    - CSS modules(Scoped CSS)
+    - CSS Modules(Scoped CSS)
   - ルーティング(トップページ、下層ページ)
 - microCMS (データ保存)
-- Github(ソース管理)
+- GitHub (ソース管理)
   - README.md ファイルに、作成する Web アプリの 機能仕様 を記載する
-- Vercel（デプロイ・公開サーバ）
+- Vercel (デプロイ・公開サーバ)
 
 ## 2. スケジュール
 
-### 1. 公開内容の提出 — 2/4（水）まで
+### 1. 公開内容の提出 — 11/17（火）まで
 
 Slack に以下の情報を投稿してください。
 
 - 作成するアプリの機能
 - プロジェクト名
-- Github の URL
+- GitHub の URL
 - Vercel の URL
 
 投稿例：
@@ -41,12 +41,12 @@ Slack に以下の情報を投稿してください。
 
 ```
 
-### 2. 開発期間 — 2/3（火）〜 2/25（水）
+### 2. 開発期間 — 11/17（火）〜 11/26（木）
 
 - 日次で成果物を GitHub に push すること  
   → この更新状況を 授業態度の評価 に反映します
 
-### 3. アプリ説明会 — 2/26（木）
+### 3. アプリ説明会 — 11/26（木）
 
 発表内容（説明のポイント）：
 
@@ -66,13 +66,13 @@ Slack に以下の情報を投稿してください。
 
 ### 検定の問題サイト(ITF+、SEA/J)
 
-#### 生成AI(chatgpt)の利用
+#### 生成AI(ChatGPT)の利用
 
 - [リンク](https://chatgpt.com/share/697fedab-9634-8002-bf10-86f706d1a721)
 
-#### Github
+#### GitHub
 
-- [Github](https://github.com/KimiyukiYamauchi/quizsite)
+- [GitHub](https://github.com/KimiyukiYamauchi/quizsite)
 
 #### Vercel
 
