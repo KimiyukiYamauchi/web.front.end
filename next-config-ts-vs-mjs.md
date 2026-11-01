@@ -24,6 +24,34 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
+## 拡張子 js / mjs / ts の違い
+
+| 拡張子 | 意味 | 特徴 |
+|---|---|---|
+| `.js` | JavaScript | いちばん基本の形式。`import` を使えるか(ESM)、`require` を使うか(CommonJS)は、`package.json` の `"type"` の設定で決まる |
+| `.mjs` | JavaScript(ESM 専用) | `m` は module(モジュール)の頭文字。`package.json` の設定に関係なく、必ず `import` / `export` を使う形式として扱われる |
+| `.ts` | TypeScript | JavaScript に「型」を足したもの。入力補完やミスの検出が効く。実行前に JavaScript に変換される |
+
+next.config では、それぞれ次のように書きます。
+
+```js
+// next.config.mjs(型なし。VSCode で補完を効かせたいときはコメントで型を指定する)
+/** @type {import('next').NextConfig} */
+const nextConfig = { /* ... */ };
+export default nextConfig;
+```
+
+```ts
+// next.config.ts(型あり。import type で型を読み込む)
+import type { NextConfig } from "next";
+const nextConfig: NextConfig = { /* ... */ };
+export default nextConfig;
+```
+
+- `.mjs` は型を書けないので、`/** @type ... */` というコメントで型を伝える
+- `.ts` は `: NextConfig` と直接書けるので、より分かりやすい
+- どれも、書ける設定の中身(`images` など)は同じ
+
 ## なぜファイルが違うの?(経緯)
 
 | 時期 | できごと |
@@ -68,3 +96,4 @@ Next.js は、次の順番で設定ファイルを探し、**最初に見つか�
 - 外部画像の許可は `next.config` の `images.remotePatterns` に書く
 - `.mjs` が無いプロジェクトでは `next.config.ts` に書けばよい
 - 設定ファイルは複数あっても、読まれるのは 1 つだけ(`.js` → `.mjs` → `.ts` の順)
+- 拡張子の違い: `.js` は基本の JavaScript、`.mjs` は `import` 専用の JavaScript、`.ts` は型付きの TypeScript
