@@ -1,6 +1,6 @@
 # Next.js の Cache Components と動的ルート：`generateStaticParams` と `<Suspense>` の使い分け
 
-Next.js + microCMS のニュースサイトで、2つのページの書き方がバラバラになっていることに気づき、原因を調べて統一した記録です。
+Next.js + microCMS のニュースサイトで、`await params` を書いた動的ルートのビルドエラーへの対応方法として `generateStaticParams` と `<Suspense>` の2種類が使われていることに気づき、違いを調べて統一した記録です。
 
 **使用バージョン：** Next.js 16.4.2（`cacheComponents` と `partialPrefetching` を有効化）
 
@@ -42,7 +42,7 @@ Next.js + microCMS のニュースサイトで、2つのページの書き方が
 **ニュース詳細ページ：`generateStaticParams` で対応**
 
 ```tsx
-// app/news/[slug]/page.tsx（修正前）
+// app/news/[slug]/page.tsx
 export async function generateStaticParams() {
   const { contents } = await getNewsList({ fields: "id", limit: 100 });
   return contents.map((news) => ({ slug: news.id }));
@@ -90,6 +90,59 @@ async function CategoryNews({ params }: Pick<Props, "params">) {
 | 中身の事前生成 | される | されない |
 | 一覧にない URL の初回アクセス | 描画が終わるまで待つ | フォールバックをすぐ表示できる |
 | 向いている場面 | URL を事前に列挙できる | URL を事前に列挙できない |
+
+### `generateStaticParams` の処理を詳しく見る
+
+ニュース詳細ページの `generateStaticParams` を、1行ずつ見ていきます。
+
+```tsx
+export async function generateStaticParams() {
+  const { contents } = await getNewsList({ fields: "id", limit: 100 });
+  return contents.map((news) => ({ slug: news.id }));
+}
+```
+
+**1. `export async function generateStaticParams()`**
+
+Next.js が決まった名前で認識する関数なので、自分で呼び出す必要はありません。`export` が必須で、microCMS からデータを取得するために `async` にしています。
+
+**2. `await getNewsList({ fields: "id", limit: 100 })`**
+
+microCMS からニュースの一覧を取得します。渡した条件は、そのまま microCMS の API に送られます。
+
+- `fields: "id"`：取得する項目を `id` だけに絞ります。URL の生成に本文やタイトルは不要なので、通信量を抑えられます。
+- `limit: 100`：最大100件まで取得します。
+
+**3. `const { contents } = ...`**
+
+分割代入で、レスポンスから記事の配列 `contents` だけを取り出しています。`fields: "id"` を指定しているため、中身は次のようになります。
+
+```ts
+[{ id: "n27h010yl" }, { id: "mcx_dv6ecrw1" }, ...]
+```
+
+**4. `contents.map((news) => ({ slug: news.id }))`**
+
+記事の配列を、Next.js が求める形に変換します。
+
+```ts
+[{ slug: "n27h010yl" }, { slug: "mcx_dv6ecrw1" }, ...]
+```
+
+`slug` というキー名は、フォルダ名 `[slug]` と一致させる必要があります。また、`({ ... })` の丸括弧を外すと `{}` が関数本体と解釈されるので、オブジェクトを返すために必要です。
+
+**ビルド時の流れ**
+
+1. `npm run build` を実行すると、Next.js が `generateStaticParams` を呼び出します。
+2. 返された配列から、`/news/n27h010yl` や `/news/mcx_dv6ecrw1` などの URL が決まります。
+3. URL ごとに `Page` を実行します。`params` には `{ slug: "n27h010yl" }` のような値が入ります。
+4. `await props.params` で `slug` を取り出し、`getNewsDetail(slug)` で記事の本文を取得して描画します。
+5. 完成したページがビルド結果として保存されます。
+
+**注意点**
+
+- **対象は最大100件：** 101件目以降の記事はビルド時に事前生成されません。
+- **ビルド後に追加された記事も対象外：** この関数はビルド時に実行されるので、新しい記事は次のビルドまで一覧に含まれません。これらの URL は、アクセス時に描画されます。
 
 ### `<Suspense>` のみの問題点
 
