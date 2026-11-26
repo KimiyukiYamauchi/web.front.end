@@ -32,7 +32,7 @@ JavaScript の基礎から React、Next.js（TypeScript）までを段階的に�
 | E. 期末課題（企画・開発） | 第38〜46回 | 個人での企画・設計・実装・デプロイ |
 | F. 発表・まとめ | 第47〜48回 | アプリ説明会、総括 |
 
-※ 48コマ版の構成です。38コマ版は [syllabus_38.md](syllabus_38.md) を参照してください。
+※ 48コマ版の構成です。38コマ版は [syllabus_38.md](syllabus_38.md)、58コマ版は [syllabus_58.md](syllabus_58.md) を参照してください。
 
 ## 使用技術
 
@@ -52,6 +52,7 @@ JavaScript の基礎から React、Next.js（TypeScript）までを段階的に�
 | --- | --- |
 | [syllabus.md](syllabus.md) | 授業シラバス（48コマ版）：到達目標・評価方法・授業計画・期末課題要件 |
 | [syllabus_38.md](syllabus_38.md) | 授業シラバス（38コマ版）：48コマ版の短縮版 |
+| [syllabus_58.md](syllabus_58.md) | 授業シラバス（58コマ版）：48コマ版の拡張版（Vanilla JS・React を手厚く） |
 | [kadai.md](kadai.md) | 期末課題の要件・スケジュール・評価のポイント |
 
 ### モジュールB：Vanilla JavaScript 基礎
@@ -150,6 +151,7 @@ web.front.end/
 ├── img/                 # 教材内で使用する画像
 ├── syllabus.md          # シラバス（48コマ版）
 ├── syllabus_38.md       # シラバス（38コマ版）
+├── syllabus_58.md       # シラバス（58コマ版）
 ├── kadai.md             # 期末課題
 ├── *.md                 # 各種手順書・リファレンス
 └── add_toc.py           # 目次自動生成スクリプト
