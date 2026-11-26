@@ -20,7 +20,7 @@ Claude Code などのAIツールを使わず、自分の手でコマンドを実
 
 ### 0️⃣ 事前準備
 
-- Node.js（LTS版）がインストール済みであること（[install.md](./install.md) 参照）
+- Node.js（LTS版）がインストール済みであること（[node.install.md](./node.install.md) 参照）
 - [Supabase](https://supabase.com/) のアカウントを作成しておく
 
 ```bash

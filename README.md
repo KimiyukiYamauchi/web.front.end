@@ -78,7 +78,7 @@ JavaScript の基礎から React、Next.js（TypeScript）までを段階的に�
 
 | ファイル | 内容 |
 | --- | --- |
-| [install.md](install.md) | Node.js / npm、Visual Studio Code のインストール手順 |
+| [node.install.md](node.install.md) | Node.js / npm のインストール手順 |
 | [vite.md](vite.md) | React + TypeScript + Vite の環境構築と GitHub Pages での公開手順 |
 
 ### JavaScript リファレンス
